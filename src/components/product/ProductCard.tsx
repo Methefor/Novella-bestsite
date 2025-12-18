@@ -1,175 +1,242 @@
-'use client'
+/**
+ * NOVELLA - Product Card Component
+ * Tek bir ürünü temsil eden card component
+ */
 
-import { useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Heart, ShoppingBag } from 'lucide-react'
-import { motion } from 'framer-motion'
+'use client';
+
+import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Heart, ShoppingBag, Eye } from 'lucide-react';
+import type { Product } from '@/types/product';
 
 interface ProductCardProps {
-  id: string
-  name: string
-  slug: string
-  price: number
-  originalPrice?: number
-  images: string[]
-  colors?: {
-    name: string
-    hex: string
-  }[]
-  badge?: 'new' | 'sale' | 'sold-out'
-  isWishlisted?: boolean
-  onWishlistToggle?: (id: string) => void
-  onQuickAdd?: (id: string) => void
+  product: Product;
 }
 
-export default function ProductCard({
-  id,
-  name,
-  slug,
-  price,
-  originalPrice,
-  images,
-  colors,
-  badge,
-  isWishlisted = false,
-  onWishlistToggle,
-  onQuickAdd,
-}: ProductCardProps) {
-  const [currentImage, setCurrentImage] = useState(0)
-  const [isHovered, setIsHovered] = useState(false)
+export default function ProductCard({ product }: ProductCardProps) {
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
-  const discountPercentage = originalPrice
-    ? Math.round(((originalPrice - price) / originalPrice) * 100)
-    : 0
+  // Varsayılan varyantı al
+  const defaultVariant = product.variants.find(
+    (v) => v.id === product.defaultVariant
+  ) || product.variants[0];
 
-  const handleWishlistClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    onWishlistToggle?.(id)
-  }
+  // İndirim yüzdesi hesapla
+  const hasDiscount = product.originalPrice && product.originalPrice > product.price;
+  const discountPercentage = hasDiscount
+    ? Math.round(((product.originalPrice! - product.price) / product.originalPrice!) * 100)
+    : 0;
 
-  const handleQuickAddClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    onQuickAdd?.(id)
-  }
+  // Stok durumu
+  const isInStock = defaultVariant.stock > 0;
 
   return (
-    <Link href={`/product/${slug}`}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        whileHover={{ y: -4 }}
-        transition={{ duration: 0.3 }}
-        className="product-card"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {/* Image Container */}
-        <div className="group relative aspect-product bg-gray-50 overflow-hidden">
-          {/* Main Image */}
+    <div
+      className="group relative"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Product Image Container */}
+      <Link href={`/products/${product.slug}`} className="block relative aspect-[3/4] mb-3 overflow-hidden rounded-lg bg-cream-50">
+        {/* Main Image */}
+        <Image
+          src={defaultVariant.images[0]}
+          alt={product.name}
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-110"
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+        />
+
+        {/* Hover Image (2. görsel) */}
+        {defaultVariant.images[1] && (
           <Image
-            src={images[isHovered && images.length > 1 ? 1 : 0] || '/placeholder-product.svg'}
-            alt={name}
+            src={defaultVariant.images[1]}
+            alt={`${product.name} - 2`}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+            className={`
+              object-cover transition-opacity duration-500
+              ${isHovered ? 'opacity-100' : 'opacity-0'}
+            `}
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
+        )}
 
-          {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-2">
-            {badge === 'new' && (
-              <span className="badge-new shadow-sm">YENİ</span>
-            )}
-            {badge === 'sale' && discountPercentage > 0 && (
-              <span className="badge-sale shadow-sm">%{discountPercentage} İNDİRİM</span>
-            )}
-            {badge === 'sold-out' && (
-              <span className="badge-sold-out shadow-sm">TÜKENDİ</span>
-            )}
-          </div>
-
-          {/* Wishlist Button */}
-          <button
-            onClick={handleWishlistClick}
-            className={`absolute top-3 right-3 w-10 h-10 flex items-center justify-center rounded-full 
-              ${isWishlisted ? 'bg-gold text-white' : 'bg-white/90 text-gray-700'} 
-              hover:bg-gold hover:text-white transition-all shadow-md
-              ${isHovered ? 'opacity-100' : 'opacity-0 md:opacity-0'} md:group-hover:opacity-100`}
-            aria-label="Favorilere ekle"
-          >
-            <Heart
-              className="w-5 h-5"
-              fill={isWishlisted ? 'currentColor' : 'none'}
-            />
-          </button>
-
-          {/* Quick Add Button - Shows on hover */}
-          <motion.button
-            initial={{ opacity: 0, y: 10 }}
-            animate={{
-              opacity: isHovered ? 1 : 0,
-              y: isHovered ? 0 : 10,
-            }}
-            transition={{ duration: 0.2 }}
-            onClick={handleQuickAddClick}
-            className="absolute bottom-3 left-3 right-3 btn-primary shadow-lg hidden md:flex"
-            disabled={badge === 'sold-out'}
-          >
-            <ShoppingBag className="w-5 h-5" />
-            Hızlı Ekle
-          </motion.button>
+        {/* Badges */}
+        <div className="absolute top-3 left-3 flex flex-col gap-2">
+          {product.isNew && (
+            <span className="badge-new">
+              YENİ
+            </span>
+          )}
+          {hasDiscount && (
+            <span className="badge-sale">
+              %{discountPercentage} İNDİRİM
+            </span>
+          )}
+          {product.isBestSeller && (
+            <span className="badge-bestseller">
+              ÇOK SATAN
+            </span>
+          )}
+          {!isInStock && (
+            <span className="badge-out-of-stock">
+              STOKTA YOK
+            </span>
+          )}
         </div>
 
-        {/* Product Info */}
-        <div className="p-4">
-          {/* Product Name */}
-          <h3 className="font-medium text-gray-900 mb-2 line-clamp-2 hover:text-gold transition-colors">
-            {name}
+        {/* Quick Actions (Hover) */}
+        <div
+          className={`
+            absolute top-3 right-3 flex flex-col gap-2
+            transition-all duration-300
+            ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'}
+          `}
+        >
+          {/* Wishlist */}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setIsWishlisted(!isWishlisted);
+            }}
+            className={`
+              p-2 rounded-full backdrop-blur-sm transition-all duration-200
+              ${isWishlisted 
+                ? 'bg-gold text-white' 
+                : 'bg-white/90 text-black/70 hover:bg-gold hover:text-white'
+              }
+            `}
+            aria-label="Favorilere ekle"
+          >
+            <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
+          </button>
+
+          {/* Quick View */}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              // TODO: Open quick view modal
+            }}
+            className="p-2 bg-white/90 backdrop-blur-sm rounded-full text-black/70 hover:bg-gold hover:text-white transition-all duration-200"
+            aria-label="Hızlı görünüm"
+          >
+            <Eye className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Add to Cart (Hover - Bottom) */}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            // TODO: Add to cart
+          }}
+          disabled={!isInStock}
+          className={`
+            absolute bottom-0 left-0 right-0 w-full py-3
+            bg-black/90 backdrop-blur-sm text-white
+            flex items-center justify-center gap-2
+            transition-all duration-300
+            ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}
+            ${!isInStock ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gold'}
+          `}
+        >
+          <ShoppingBag className="w-5 h-5" />
+          <span className="font-medium">
+            {isInStock ? 'Sepete Ekle' : 'Stokta Yok'}
+          </span>
+        </button>
+      </Link>
+
+      {/* Product Info */}
+      <div className="space-y-2">
+        {/* Category */}
+        <p className="text-xs uppercase tracking-wider text-gold">
+          {product.category}
+        </p>
+
+        {/* Name */}
+        <Link href={`/products/${product.slug}`}>
+          <h3 className="font-serif text-lg text-black group-hover:text-gold transition-colors line-clamp-2">
+            {product.name}
           </h3>
+        </Link>
 
-          {/* Color Swatches */}
-          {colors && colors.length > 0 && (
-            <div className="flex items-center gap-1.5 mb-3">
-              {colors.slice(0, 5).map((color, index) => (
-                <button
-                  key={index}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                  }}
-                  className="w-6 h-6 rounded-full border-2 border-gray-200 hover:border-gold transition-colors relative"
-                  style={{ backgroundColor: color.hex }}
-                  title={color.name}
-                  aria-label={`${color.name} renk seçeneği`}
-                >
-                  {index === 0 && (
-                    <span className="absolute inset-0 rounded-full border-2 border-gold" />
-                  )}
-                </button>
-              ))}
-              {colors.length > 5 && (
-                <span className="text-xs text-gray-500 ml-1">
-                  +{colors.length - 5}
-                </span>
-              )}
-            </div>
-          )}
-
-          {/* Price */}
+        {/* Rating (if available) */}
+        {product.rating && product.reviewCount && (
           <div className="flex items-center gap-2">
-            <span className="text-price font-bold text-gray-900">
-              {price.toLocaleString('tr-TR')}₺
+            <div className="flex items-center">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <svg
+                  key={i}
+                  className={`w-4 h-4 ${
+                    i < Math.floor(product.rating!)
+                      ? 'text-gold fill-current'
+                      : 'text-cream-300 fill-current'
+                  }`}
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                </svg>
+              ))}
+            </div>
+            <span className="text-xs text-black/60">
+              ({product.reviewCount})
             </span>
-            {originalPrice && originalPrice > price && (
-              <span className="text-sm text-gray-400 line-through">
-                {originalPrice.toLocaleString('tr-TR')}₺
+          </div>
+        )}
+
+        {/* Price */}
+        <div className="flex items-center gap-2">
+          <span className="text-lg font-bold text-black">
+            {product.price.toLocaleString('tr-TR')} TL
+          </span>
+          {hasDiscount && (
+            <span className="text-sm text-black/40 line-through">
+              {product.originalPrice!.toLocaleString('tr-TR')} TL
+            </span>
+          )}
+        </div>
+
+        {/* Color Variants (ilk 4 tanesi) */}
+        {product.variants.length > 1 && (
+          <div className="flex items-center gap-1.5">
+            {product.variants.slice(0, 4).map((variant) => (
+              <button
+                key={variant.id}
+                className="w-6 h-6 rounded-full border-2 border-cream-300 hover:border-gold transition-colors"
+                style={{
+                  backgroundColor:
+                    variant.color === 'altın' ? '#D4AF37' :
+                    variant.color === 'gümüş' ? '#C0C0C0' :
+                    variant.color === 'rose-gold' ? '#B76E79' :
+                    variant.color === 'siyah' ? '#0F0F0F' :
+                    variant.color === 'beyaz' ? '#FFFFFF' :
+                    '#D4AF37',
+                }}
+                title={variant.color}
+              />
+            ))}
+            {product.variants.length > 4 && (
+              <span className="text-xs text-black/60">
+                +{product.variants.length - 4}
               </span>
             )}
           </div>
-        </div>
-      </motion.div>
-    </Link>
-  )
+        )}
+
+        {/* İsim Baskısı Badge */}
+        {product.isCustomizable && (
+          <span className="inline-flex items-center gap-1 text-xs text-gold">
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+            </svg>
+            İsim Baskısı Yapılabilir
+          </span>
+        )}
+      </div>
+    </div>
+  );
 }
