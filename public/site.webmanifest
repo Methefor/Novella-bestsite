@@ -1,0 +1,10 @@
+{
+  "name": "NOVELLA - Her Parça Bir Hikaye",
+  "short_name": "NOVELLA",
+  "description": "Butik takı koleksiyonları. Kaliteli çelik takılar, uygun fiyatlar.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FDFBF7",
+  "theme_color": "#D4AF37",
+  "icons": []
+}
