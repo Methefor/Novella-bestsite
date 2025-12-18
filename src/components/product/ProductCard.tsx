@@ -67,7 +67,7 @@ export default function ProductCard({
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Image Container */}
-        <div className="relative aspect-product bg-gray-50 overflow-hidden">
+        <div className="group relative aspect-product bg-gray-50 overflow-hidden">
           {/* Main Image */}
           <Image
             src={images[isHovered && images.length > 1 ? 1 : 0] || '/placeholder-product.svg'}
