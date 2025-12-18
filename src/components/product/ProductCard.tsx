@@ -5,11 +5,11 @@
 
 'use client';
 
-import { useState } from 'react';
+import type { Product } from '@/types/product';
+import { Eye, Heart, ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart, ShoppingBag, Eye } from 'lucide-react';
-import type { Product } from '@/types/product';
+import { useState } from 'react';
 
 interface ProductCardProps {
   product: Product;
@@ -20,14 +20,18 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   // Varsayılan varyantı al
-  const defaultVariant = product.variants.find(
-    (v) => v.id === product.defaultVariant
-  ) || product.variants[0];
+  const defaultVariant =
+    product.variants.find((v) => v.id === product.defaultVariant) ||
+    product.variants[0];
 
   // İndirim yüzdesi hesapla
-  const hasDiscount = product.originalPrice && product.originalPrice > product.price;
+  const hasDiscount =
+    product.originalPrice && product.originalPrice > product.price;
   const discountPercentage = hasDiscount
-    ? Math.round(((product.originalPrice! - product.price) / product.originalPrice!) * 100)
+    ? Math.round(
+        ((product.originalPrice! - product.price) / product.originalPrice!) *
+          100
+      )
     : 0;
 
   // Stok durumu
@@ -40,7 +44,10 @@ export default function ProductCard({ product }: ProductCardProps) {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Product Image Container */}
-      <Link href={`/products/${product.slug}`} className="block relative aspect-[3/4] mb-3 overflow-hidden rounded-lg bg-cream-50">
+      <Link
+        href={`/products/${product.slug}`}
+        className="block relative aspect-[3/4] mb-3 overflow-hidden rounded-lg bg-cream-50"
+      >
         {/* Main Image */}
         <Image
           src={defaultVariant.images[0]}
@@ -66,26 +73,14 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-2">
-          {product.isNew && (
-            <span className="badge-new">
-              YENİ
-            </span>
-          )}
+          {product.isNew && <span className="badge-new">YENİ</span>}
           {hasDiscount && (
-            <span className="badge-sale">
-              %{discountPercentage} İNDİRİM
-            </span>
+            <span className="badge-sale">%{discountPercentage} İNDİRİM</span>
           )}
           {product.isBestSeller && (
-            <span className="badge-bestseller">
-              ÇOK SATAN
-            </span>
+            <span className="badge-bestseller">ÇOK SATAN</span>
           )}
-          {!isInStock && (
-            <span className="badge-out-of-stock">
-              STOKTA YOK
-            </span>
-          )}
+          {!isInStock && <span className="badge-out-of-stock">STOKTA YOK</span>}
         </div>
 
         {/* Quick Actions (Hover) */}
@@ -93,7 +88,11 @@ export default function ProductCard({ product }: ProductCardProps) {
           className={`
             absolute top-3 right-3 flex flex-col gap-2
             transition-all duration-300
-            ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'}
+            ${
+              isHovered
+                ? 'opacity-100 translate-x-0'
+                : 'opacity-0 translate-x-4'
+            }
           `}
         >
           {/* Wishlist */}
@@ -104,14 +103,17 @@ export default function ProductCard({ product }: ProductCardProps) {
             }}
             className={`
               p-2 rounded-full backdrop-blur-sm transition-all duration-200
-              ${isWishlisted 
-                ? 'bg-gold text-white' 
-                : 'bg-white/90 text-black/70 hover:bg-gold hover:text-white'
+              ${
+                isWishlisted
+                  ? 'bg-gold text-white'
+                  : 'bg-white/90 text-black/70 hover:bg-gold hover:text-white'
               }
             `}
             aria-label="Favorilere ekle"
           >
-            <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
+            <Heart
+              className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`}
+            />
           </button>
 
           {/* Quick View */}
@@ -139,7 +141,11 @@ export default function ProductCard({ product }: ProductCardProps) {
             bg-black/90 backdrop-blur-sm text-white
             flex items-center justify-center gap-2
             transition-all duration-300
-            ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}
+            ${
+              isHovered
+                ? 'translate-y-0 opacity-100'
+                : 'translate-y-full opacity-0'
+            }
             ${!isInStock ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gold'}
           `}
         >
@@ -209,12 +215,17 @@ export default function ProductCard({ product }: ProductCardProps) {
                 className="w-6 h-6 rounded-full border-2 border-cream-300 hover:border-gold transition-colors"
                 style={{
                   backgroundColor:
-                    variant.color === 'altın' ? '#D4AF37' :
-                    variant.color === 'gümüş' ? '#C0C0C0' :
-                    variant.color === 'rose-gold' ? '#B76E79' :
-                    variant.color === 'siyah' ? '#0F0F0F' :
-                    variant.color === 'beyaz' ? '#FFFFFF' :
-                    '#D4AF37',
+                    variant.color === 'altin'
+                      ? '#D4AF37'
+                      : variant.color === 'gumus'
+                      ? '#C0C0C0'
+                      : variant.color === 'rose-gold'
+                      ? '#B76E79'
+                      : variant.color === 'siyah'
+                      ? '#0F0F0F'
+                      : variant.color === 'beyaz'
+                      ? '#FFFFFF'
+                      : '#D4AF37',
                 }}
                 title={variant.color}
               />

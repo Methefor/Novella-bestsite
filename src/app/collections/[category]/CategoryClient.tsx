@@ -5,13 +5,13 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useFilterStore } from '@/store/filterStore';
 import FilterSidebar from '@/components/collections/FilterSidebar';
 import ProductGrid from '@/components/collections/ProductGrid';
 import SortDropdown from '@/components/collections/SortDropdown';
-import { SlidersHorizontal, X } from 'lucide-react';
+import { useFilterStore } from '@/store/filterStore';
 import type { Product, ProductCategory } from '@/types/product';
+import { SlidersHorizontal, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 // MOCK DATA - Bu sonra API'den gelecek
 const MOCK_PRODUCTS: Product[] = [
@@ -27,15 +27,15 @@ const MOCK_PRODUCTS: Product[] = [
     variants: [
       {
         id: 'v1',
-        color: 'altın',
-        material: 'altın-kaplama',
+        color: 'altin',
+        material: 'altin-kaplama',
         stock: 15,
         images: ['/products/kolye-1.jpg', '/products/kolye-1-alt.jpg'],
       },
     ],
     defaultVariant: 'v1',
     features: ['Su geçirmez', 'Hipoalerjenik', 'Ayarlanabilir uzunluk'],
-    material: 'altın-kaplama',
+    material: 'altin-kaplama',
     isNew: true,
     isBestSeller: false,
     isCustomizable: true,
@@ -48,7 +48,7 @@ const MOCK_PRODUCTS: Product[] = [
     id: '2',
     name: 'Rose Gold Bilezik Set',
     slug: 'rose-gold-bilezik-set',
-    description: '3\'lü stackable bilezik seti',
+    description: "3'lü stackable bilezik seti",
     category: 'bilezik',
     price: 249,
     variants: [
@@ -61,7 +61,7 @@ const MOCK_PRODUCTS: Product[] = [
       },
     ],
     defaultVariant: 'v2',
-    features: ['3\'lü set', 'Ayarlanabilir'],
+    features: ["3'lü set", 'Ayarlanabilir'],
     material: 'rose-gold',
     isNew: false,
     isBestSeller: true,
@@ -76,27 +76,27 @@ const MOCK_PRODUCTS: Product[] = [
     name: 'Minimal Çelik Küpe',
     slug: 'minimal-celik-kupe',
     description: 'Her gün kullanıma uygun minimal küpe',
-    category: 'küpe',
+    category: 'kupe',
     price: 149,
     variants: [
       {
         id: 'v3',
-        color: 'gümüş',
-        material: 'çelik',
+        color: 'gumus',
+        material: 'celik',
         stock: 25,
         images: ['/products/kupe-1.jpg'],
       },
       {
         id: 'v4',
-        color: 'altın',
-        material: 'altın-kaplama',
+        color: 'altin',
+        material: 'altin-kaplama',
         stock: 20,
         images: ['/products/kupe-1-gold.jpg'],
       },
     ],
     defaultVariant: 'v3',
     features: ['Paslanmaz çelik', 'Hipoalerjenik'],
-    material: 'çelik',
+    material: 'celik',
     isNew: false,
     isBestSeller: true,
     isCustomizable: false,
@@ -110,28 +110,28 @@ const MOCK_PRODUCTS: Product[] = [
     name: 'Taşlı Yüzük',
     slug: 'tasli-yuzuk',
     description: 'Zarif taş detaylı ayarlanabilir yüzük',
-    category: 'yüzük',
+    category: 'yuzuk',
     price: 179,
     originalPrice: 229,
     variants: [
       {
         id: 'v5',
-        color: 'altın',
-        material: 'altın-kaplama',
+        color: 'altin',
+        material: 'altin-kaplama',
         stock: 12,
         images: ['/products/yuzuk-1.jpg'],
       },
       {
         id: 'v6',
-        color: 'gümüş',
-        material: 'gümüş',
+        color: 'gumus',
+        material: 'gumus',
         stock: 0,
         images: ['/products/yuzuk-1-silver.jpg'],
       },
     ],
     defaultVariant: 'v5',
     features: ['Ayarlanabilir beden', 'CZ taş'],
-    material: 'altın-kaplama',
+    material: 'altin-kaplama',
     isNew: true,
     isBestSeller: false,
     isCustomizable: true,
@@ -145,15 +145,15 @@ const MOCK_PRODUCTS: Product[] = [
 const categoryTitles: Record<ProductCategory, string> = {
   kolye: 'Kolye Koleksiyonu',
   bilezik: 'Bilezik Koleksiyonu',
-  küpe: 'Küpe Koleksiyonu',
-  yüzük: 'Yüzük Koleksiyonu',
+  kupe: 'Kupe Koleksiyonu',
+  yuzuk: 'Yüzük Koleksiyonu',
 };
 
 const categoryDescriptions: Record<ProductCategory, string> = {
   kolye: 'Zarif ve şık kolye modelleri. Her stile uygun tasarımlar.',
   bilezik: 'Şık bilezik modelleri. Solo veya set olarak kullanıma uygun.',
-  küpe: 'Minimal ve gösterişli küpe modelleri. Her tarza uygun.',
-  yüzük: 'Zarif yüzük tasarımları. Her günü özel kılan detaylar.',
+  kupe: 'Minimal ve gösterişli küpe modelleri. Her tarza uygun.',
+  yuzuk: 'Zarif yüzük tasarımları. Her günü özel kılan detaylar.',
 };
 
 interface CategoryClientProps {
@@ -193,9 +193,7 @@ export default function CategoryClient({ category }: CategoryClientProps) {
           <h1 className="font-serif text-3xl lg:text-4xl text-black mb-2">
             {categoryTitles[category]}
           </h1>
-          <p className="text-black/60">
-            {categoryDescriptions[category]}
-          </p>
+          <p className="text-black/60">{categoryDescriptions[category]}</p>
         </div>
       </div>
 

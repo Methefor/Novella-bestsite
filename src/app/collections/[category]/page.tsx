@@ -3,14 +3,22 @@
  * Kategori bazlı koleksiyon sayfası
  */
 
+import type { ProductCategory } from '@/types/product';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import CategoryClient from './CategoryClient';
-import type { ProductCategory } from '@/types/product';
 
-const VALID_CATEGORIES: ProductCategory[] = ['kolye', 'bilezik', 'küpe', 'yüzük'];
+const VALID_CATEGORIES: ProductCategory[] = [
+  'kolye',
+  'bilezik',
+  'kupe',
+  'yuzuk',
+];
 
-const categoryMeta: Record<ProductCategory, { title: string; description: string }> = {
+const categoryMeta: Record<
+  ProductCategory,
+  { title: string; description: string }
+> = {
   kolye: {
     title: 'Kolye Koleksiyonu',
     description: 'Zarif ve şık kolye modelleri. Her stile uygun tasarımlar.',
@@ -19,32 +27,34 @@ const categoryMeta: Record<ProductCategory, { title: string; description: string
     title: 'Bilezik Koleksiyonu',
     description: 'Şık bilezik modelleri. Solo veya set olarak kullanıma uygun.',
   },
-  küpe: {
+  kupe: {
     title: 'Küpe Koleksiyonu',
     description: 'Minimal ve gösterişli küpe modelleri. Her tarza uygun.',
   },
-  yüzük: {
+  yuzuk: {
     title: 'Yüzük Koleksiyonu',
     description: 'Zarif yüzük tasarımları. Her günü özel kılan detaylar.',
   },
 };
 
 interface CategoryPageProps {
-  params: {
+  params: Promise<{
     category: string;
-  };
+  }>;
 }
 
-export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
-  const category = params.category as ProductCategory;
+export async function generateMetadata({
+  params,
+}: CategoryPageProps): Promise<Metadata> {
+  const { category } = await params;
 
-  if (!VALID_CATEGORIES.includes(category)) {
+  if (!VALID_CATEGORIES.includes(category as ProductCategory)) {
     return {
       title: 'Kategori Bulunamadı | NOVELLA',
     };
   }
 
-  const meta = categoryMeta[category];
+  const meta = categoryMeta[category as ProductCategory];
 
   return {
     title: `${meta.title} | NOVELLA`,
@@ -62,13 +72,12 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function CategoryPage({ params }: CategoryPageProps) {
-  const category = params.category as ProductCategory;
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  const { category } = await params;
 
-  // Validate category
-  if (!VALID_CATEGORIES.includes(category)) {
+  if (!VALID_CATEGORIES.includes(category as ProductCategory)) {
     notFound();
   }
 
-  return <CategoryClient category={category} />;
+  return <CategoryClient category={category as ProductCategory} />;
 }
