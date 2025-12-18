@@ -19,7 +19,12 @@
   }
 
   /* Heading Defaults */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-heading font-semibold;
   }
 
@@ -97,7 +102,7 @@
 
   /* Product Card */
   .product-card {
-    @apply group relative bg-white rounded-lg overflow-hidden 
+    @apply relative bg-white rounded-lg overflow-hidden 
            shadow-sm hover:shadow-lg transition-all duration-300
            cursor-pointer;
   }
@@ -166,7 +171,7 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
@@ -254,12 +259,7 @@
 }
 
 .skeleton-shimmer {
-  background: linear-gradient(
-    90deg,
-    #f0f0f0 0px,
-    #e0e0e0 40px,
-    #f0f0f0 80px
-  );
+  background: linear-gradient(90deg, #f0f0f0 0px, #e0e0e0 40px, #f0f0f0 80px);
   background-size: 1000px 100%;
   animation: shimmer 2s infinite;
 }

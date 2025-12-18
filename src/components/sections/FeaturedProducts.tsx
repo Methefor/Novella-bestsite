@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
-import ProductGrid from '../product/ProductGrid'
+import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import ProductGrid from '../product/ProductGrid';
 
 // Mock data - Gerçek API'den gelecek
 const mockProducts = [
@@ -12,7 +12,7 @@ const mockProducts = [
     slug: 'altin-kaplama-ince-zincir-kolye',
     price: 189,
     originalPrice: 249,
-    images: ['/placeholder-product.svg', '/placeholder-product-2.svg'],
+    images: ['/images/products/urun-4.jpg', '/images/products/urun-5.jpg'],
     colors: [
       { name: 'Gold', hex: '#D4AF37' },
       { name: 'Rose Gold', hex: '#B76E79' },
@@ -22,11 +22,11 @@ const mockProducts = [
   },
   {
     id: '2',
-    name: 'Minimal Halka Bilezik Set (3\'lü)',
+    name: "Minimal Halka Bilezik Set (3'lü)",
     slug: 'minimal-halka-bilezik-set',
     price: 159,
     originalPrice: 199,
-    images: ['/placeholder-product.svg'],
+    images: ['/images/products/urun-6.jpg'],
     colors: [
       { name: 'Gold', hex: '#D4AF37' },
       { name: 'Silver', hex: '#C0C0C0' },
@@ -38,7 +38,7 @@ const mockProducts = [
     name: 'Kristal Taşlı Sallantılı Küpe',
     slug: 'kristal-tasli-sallantili-kupe',
     price: 129,
-    images: ['/placeholder-product.svg', '/placeholder-product-2.svg'],
+    images: ['/images/products/urun-7.jpg', '/images/products/urun-8.jpg'],
     colors: [
       { name: 'Gold', hex: '#D4AF37' },
       { name: 'Rose Gold', hex: '#B76E79' },
@@ -50,10 +50,8 @@ const mockProducts = [
     name: 'İnci Detaylı Zincir Bilezik',
     slug: 'inci-detayli-zincir-bilezik',
     price: 169,
-    images: ['/placeholder-product.svg'],
-    colors: [
-      { name: 'Gold', hex: '#D4AF37' },
-    ],
+    images: ['/images/products/urun-9.jpg'],
+    colors: [{ name: 'Gold', hex: '#D4AF37' }],
   },
   {
     id: '5',
@@ -61,7 +59,7 @@ const mockProducts = [
     slug: 'geometrik-acik-yuzuk',
     price: 99,
     originalPrice: 139,
-    images: ['/placeholder-product.svg', '/placeholder-product-2.svg'],
+    images: ['/images/products/urun-10.jpg', '/images/products/urun-11.jpg'],
     colors: [
       { name: 'Gold', hex: '#D4AF37' },
       { name: 'Silver', hex: '#C0C0C0' },
@@ -69,7 +67,7 @@ const mockProducts = [
     ],
     badge: 'sale' as const,
   },
-]
+];
 
 export default function FeaturedProducts() {
   return (
@@ -100,12 +98,15 @@ export default function FeaturedProducts() {
 
         {/* Mobile "View All" Button */}
         <div className="mt-8 md:hidden flex justify-center">
-          <Link href="/collections/yeni" className="btn-outline w-full sm:w-auto">
+          <Link
+            href="/collections/yeni"
+            className="btn-outline w-full sm:w-auto"
+          >
             Tümünü Gör
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </div>
     </section>
-  )
+  );
 }
