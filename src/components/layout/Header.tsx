@@ -1,9 +1,11 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { Search, ShoppingBag, Menu, X, User } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import CartDrawer from '@/components/cart/CartDrawer';
+import MiniCart from '@/components/cart/MiniCart';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Menu, Search, User, X } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 const navigation = [
   { name: 'Ana Sayfa', href: '/' },
@@ -11,53 +13,47 @@ const navigation = [
   { name: 'Yeni Gelenler', href: '/collections/yeni' },
   { name: 'Hakkımızda', href: '/hakkimizda' },
   { name: 'İletişim', href: '/iletisim' },
-]
+];
 
 const collections = [
-  { name: 'Tüm Ürünler', href: '/collections/all' },
+  { name: 'Tüm Ürünler', href: '/collections' },
   { name: 'Kolyeler', href: '/collections/kolye' },
   { name: 'Bilezikler', href: '/collections/bilezik' },
   { name: 'Küpeler', href: '/collections/kupe' },
   { name: 'Yüzükler', href: '/collections/yuzuk' },
-  { name: 'Setler', href: '/collections/setler' },
-]
+];
 
 export default function Header() {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const [cartItemCount, setCartItemCount] = useState(0)
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
-    }
+      setIsScrolled(window.scrollY > 20);
+    };
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
-    // Body scroll lock when mobile menu is open
     if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden'
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = 'unset'
+      document.body.style.overflow = 'unset';
     }
-  }, [isMobileMenuOpen])
+  }, [isMobileMenuOpen]);
 
   return (
     <>
       <header
         className={`sticky top-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-md'
-            : 'bg-white'
+          isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md' : 'bg-white'
         }`}
       >
         <div className="container-custom">
           <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden p-2 -ml-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -66,7 +62,6 @@ export default function Header() {
               <Menu className="w-6 h-6" />
             </button>
 
-            {/* Logo */}
             <Link href="/" className="flex items-center">
               <div className="text-center">
                 <h1 className="text-2xl md:text-3xl font-heading font-bold text-gradient-gold">
@@ -78,7 +73,6 @@ export default function Header() {
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
               {navigation.map((item) => (
                 <div key={item.name} className="relative group">
@@ -89,7 +83,6 @@ export default function Header() {
                     {item.name}
                   </Link>
 
-                  {/* Dropdown for Collections */}
                   {item.hasDropdown && (
                     <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                       <div className="bg-white shadow-xl rounded-lg py-4 min-w-[200px]">
@@ -109,9 +102,7 @@ export default function Header() {
               ))}
             </nav>
 
-            {/* Right Icons */}
             <div className="flex items-center space-x-2 md:space-x-4">
-              {/* Search */}
               <button
                 onClick={() => setIsSearchOpen(true)}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -120,7 +111,6 @@ export default function Header() {
                 <Search className="w-5 h-5 text-gray-700" />
               </button>
 
-              {/* User Account */}
               <Link
                 href="/hesap"
                 className="hidden md:block p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -129,29 +119,15 @@ export default function Header() {
                 <User className="w-5 h-5 text-gray-700" />
               </Link>
 
-              {/* Shopping Cart */}
-              <Link
-                href="/sepet"
-                className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                aria-label="Sepet"
-              >
-                <ShoppingBag className="w-5 h-5 text-gray-700" />
-                {cartItemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-gold text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                    {cartItemCount}
-                  </span>
-                )}
-              </Link>
+              <MiniCart />
             </div>
           </div>
         </div>
       </header>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            {/* Overlay */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -160,7 +136,6 @@ export default function Header() {
               className="fixed inset-0 bg-black/50 z-40 md:hidden"
             />
 
-            {/* Menu Panel */}
             <motion.div
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
@@ -168,7 +143,6 @@ export default function Header() {
               transition={{ type: 'tween', duration: 0.3 }}
               className="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-white z-50 overflow-y-auto md:hidden"
             >
-              {/* Header */}
               <div className="flex items-center justify-between p-4 border-b">
                 <h2 className="text-xl font-heading font-semibold text-gradient-gold">
                   NOVELLA
@@ -181,7 +155,6 @@ export default function Header() {
                 </button>
               </div>
 
-              {/* Navigation */}
               <nav className="p-4">
                 {navigation.map((item) => (
                   <div key={item.name} className="mb-2">
@@ -193,7 +166,6 @@ export default function Header() {
                       {item.name}
                     </Link>
 
-                    {/* Collections Submenu */}
                     {item.hasDropdown && (
                       <div className="ml-4 mt-2 space-y-1">
                         {collections.map((collection) => (
@@ -211,7 +183,6 @@ export default function Header() {
                   </div>
                 ))}
 
-                {/* User Account - Mobile */}
                 <Link
                   href="/hesap"
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -226,7 +197,6 @@ export default function Header() {
         )}
       </AnimatePresence>
 
-      {/* Search Modal */}
       <AnimatePresence>
         {isSearchOpen && (
           <motion.div
@@ -264,6 +234,8 @@ export default function Header() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <CartDrawer />
     </>
-  )
+  );
 }

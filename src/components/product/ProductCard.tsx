@@ -5,6 +5,7 @@
 
 'use client';
 
+import { useCartStore } from '@/store/cartStore';
 import type { Product } from '@/types/product';
 import { Eye, Heart, ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
@@ -19,12 +20,12 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Varsayılan varyantı al
+  const addToCart = useCartStore((state) => state.addItem);
+
   const defaultVariant =
     product.variants.find((v) => v.id === product.defaultVariant) ||
     product.variants[0];
 
-  // İndirim yüzdesi hesapla
   const hasDiscount =
     product.originalPrice && product.originalPrice > product.price;
   const discountPercentage = hasDiscount
@@ -34,7 +35,6 @@ export default function ProductCard({ product }: ProductCardProps) {
       )
     : 0;
 
-  // Stok durumu
   const isInStock = defaultVariant.stock > 0;
 
   return (
@@ -43,12 +43,10 @@ export default function ProductCard({ product }: ProductCardProps) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Product Image Container */}
       <Link
         href={`/products/${product.slug}`}
         className="block relative aspect-[3/4] mb-3 overflow-hidden rounded-lg bg-cream-50"
       >
-        {/* Main Image */}
         <Image
           src={defaultVariant.images[0]}
           alt={product.name}
@@ -57,7 +55,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
         />
 
-        {/* Hover Image (2. görsel) */}
         {defaultVariant.images[1] && (
           <Image
             src={defaultVariant.images[1]}
@@ -71,7 +68,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           />
         )}
 
-        {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-2">
           {product.isNew && <span className="badge-new">YENİ</span>}
           {hasDiscount && (
@@ -83,7 +79,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           {!isInStock && <span className="badge-out-of-stock">STOKTA YOK</span>}
         </div>
 
-        {/* Quick Actions (Hover) */}
         <div
           className={`
             absolute top-3 right-3 flex flex-col gap-2
@@ -95,7 +90,6 @@ export default function ProductCard({ product }: ProductCardProps) {
             }
           `}
         >
-          {/* Wishlist */}
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -116,11 +110,9 @@ export default function ProductCard({ product }: ProductCardProps) {
             />
           </button>
 
-          {/* Quick View */}
           <button
             onClick={(e) => {
               e.preventDefault();
-              // TODO: Open quick view modal
             }}
             className="p-2 bg-white/90 backdrop-blur-sm rounded-full text-black/70 hover:bg-gold hover:text-white transition-all duration-200"
             aria-label="Hızlı görünüm"
@@ -129,11 +121,12 @@ export default function ProductCard({ product }: ProductCardProps) {
           </button>
         </div>
 
-        {/* Add to Cart (Hover - Bottom) */}
         <button
           onClick={(e) => {
             e.preventDefault();
-            // TODO: Add to cart
+            if (isInStock) {
+              addToCart(product, product.defaultVariant, 1);
+            }
           }}
           disabled={!isInStock}
           className={`
@@ -156,21 +149,17 @@ export default function ProductCard({ product }: ProductCardProps) {
         </button>
       </Link>
 
-      {/* Product Info */}
       <div className="space-y-2">
-        {/* Category */}
         <p className="text-xs uppercase tracking-wider text-gold">
           {product.category}
         </p>
 
-        {/* Name */}
         <Link href={`/products/${product.slug}`}>
           <h3 className="font-serif text-lg text-black group-hover:text-gold transition-colors line-clamp-2">
             {product.name}
           </h3>
         </Link>
 
-        {/* Rating (if available) */}
         {product.rating && product.reviewCount && (
           <div className="flex items-center gap-2">
             <div className="flex items-center">
@@ -194,7 +183,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
         )}
 
-        {/* Price */}
         <div className="flex items-center gap-2">
           <span className="text-lg font-bold text-black">
             {product.price.toLocaleString('tr-TR')} TL
@@ -206,7 +194,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
 
-        {/* Color Variants (ilk 4 tanesi) */}
         {product.variants.length > 1 && (
           <div className="flex items-center gap-1.5">
             {product.variants.slice(0, 4).map((variant) => (
@@ -238,7 +225,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
         )}
 
-        {/* İsim Baskısı Badge */}
         {product.isCustomizable && (
           <span className="inline-flex items-center gap-1 text-xs text-gold">
             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
