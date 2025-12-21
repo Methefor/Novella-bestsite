@@ -192,7 +192,7 @@ export default function FilterSidebar() {
           />
 
           <div className="text-xs text-black/60 text-center">
-            {filterStore.priceRange.min} TL - {filterStore.priceRange.max} TL
+            {filterStore.priceRange.min}₺ - {filterStore.priceRange.max}₺
           </div>
         </div>
       </FilterSection>

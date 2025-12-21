@@ -1,5 +1,4 @@
 import ToastContainer from '@/components/common/Toast';
-import AnnouncementBar from '@/components/layout/AnnouncementBar';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import type { Metadata } from 'next';
@@ -103,7 +102,6 @@ export default function RootLayout({
   return (
     <html lang="tr" className={`${cormorant.variable} ${inter.variable}`}>
       <body className="font-body antialiased">
-        <AnnouncementBar />
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />

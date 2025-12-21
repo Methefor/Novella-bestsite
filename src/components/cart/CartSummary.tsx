@@ -5,9 +5,9 @@
 
 'use client';
 
-import { useState } from 'react';
-import { Tag, X } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
+import { Tag, X } from 'lucide-react';
+import { useState } from 'react';
 
 interface CartSummaryProps {
   showCoupon?: boolean;
@@ -16,7 +16,7 @@ interface CartSummaryProps {
 export default function CartSummary({ showCoupon = true }: CartSummaryProps) {
   const [couponCode, setCouponCode] = useState('');
   const [couponError, setCouponError] = useState('');
-  
+
   const subtotal = useCartStore((state) => state.subtotal);
   const shippingCost = useCartStore((state) => state.shippingCost);
   const discount = useCartStore((state) => state.discount);
@@ -25,7 +25,7 @@ export default function CartSummary({ showCoupon = true }: CartSummaryProps) {
   const removeCoupon = useCartStore((state) => state.removeCoupon);
 
   const hasCoupon = discount > 0;
-  const freeShippingThreshold = 300;
+  const freeShippingThreshold = 400;
   const remainingForFreeShipping = freeShippingThreshold - subtotal;
 
   const handleApplyCoupon = () => {
@@ -55,7 +55,8 @@ export default function CartSummary({ showCoupon = true }: CartSummaryProps) {
       {shippingCost > 0 && remainingForFreeShipping > 0 && (
         <div className="p-3 bg-blue-50 rounded-lg">
           <p className="text-sm text-blue-800">
-            <strong>{remainingForFreeShipping.toLocaleString('tr-TR')} TL</strong> daha alışveriş yapın, 
+            <strong>{remainingForFreeShipping.toLocaleString('tr-TR')}₺</strong>{' '}
+            daha alışveriş yapın,
             <strong> kargo bedava!</strong> 🎉
           </p>
           <div className="mt-2 h-2 bg-blue-200 rounded-full overflow-hidden">
@@ -125,7 +126,7 @@ export default function CartSummary({ showCoupon = true }: CartSummaryProps) {
         <div className="flex justify-between text-sm">
           <span className="text-black/60">Ara Toplam</span>
           <span className="font-medium text-black">
-            {subtotal.toLocaleString('tr-TR')} TL
+            {subtotal.toLocaleString('tr-TR')}₺
           </span>
         </div>
 
@@ -136,7 +137,7 @@ export default function CartSummary({ showCoupon = true }: CartSummaryProps) {
             {shippingCost === 0 ? (
               <span className="text-green-600">Ücretsiz</span>
             ) : (
-              `${shippingCost.toLocaleString('tr-TR')} TL`
+              `${shippingCost.toLocaleString('tr-TR')}₺`
             )}
           </span>
         </div>
@@ -146,7 +147,7 @@ export default function CartSummary({ showCoupon = true }: CartSummaryProps) {
           <div className="flex justify-between text-sm">
             <span className="text-black/60">İndirim</span>
             <span className="font-medium text-green-600">
-              -{discount.toLocaleString('tr-TR')} TL
+              -{discount.toLocaleString('tr-TR')}₺
             </span>
           </div>
         )}
@@ -155,15 +156,13 @@ export default function CartSummary({ showCoupon = true }: CartSummaryProps) {
         <div className="flex justify-between pt-3 border-t border-cream-200">
           <span className="font-bold text-black">Toplam</span>
           <span className="font-bold text-xl text-gold">
-            {total.toLocaleString('tr-TR')} TL
+            {total.toLocaleString('tr-TR')}₺
           </span>
         </div>
       </div>
 
       {/* Tax Info */}
-      <p className="text-xs text-black/60 text-center">
-        KDV dahildir
-      </p>
+      <p className="text-xs text-black/60 text-center">KDV dahildir</p>
     </div>
   );
 }

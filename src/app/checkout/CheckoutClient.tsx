@@ -5,20 +5,19 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { ShieldCheck, Truck, CreditCard } from 'lucide-react';
-import { useCartStore, selectHasItems } from '@/store/cartStore';
-import { shopierClient } from '@/lib/shopier';
-import { useToast } from '@/hooks/useToast';
-import CartItem from '@/components/cart/CartItem';
 import CartSummary from '@/components/cart/CartSummary';
+import { useToast } from '@/hooks/useToast';
+import { shopierClient } from '@/lib/shopier';
+import { selectHasItems, useCartStore } from '@/store/cartStore';
+import { CreditCard, ShieldCheck, Truck } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 interface CheckoutForm {
   // İletişim
   email: string;
   phone: string;
-  
+
   // Teslimat
   firstName: string;
   lastName: string;
@@ -26,10 +25,10 @@ interface CheckoutForm {
   city: string;
   district: string;
   zipCode: string;
-  
+
   // Ödeme
   paymentMethod: 'credit-card' | 'bank-transfer';
-  
+
   // Notlar
   orderNote?: string;
 }
@@ -44,7 +43,7 @@ export default function CheckoutClient() {
   const total = useCartStore((state) => state.total);
   const clearCart = useCartStore((state) => state.clearCart);
   const toast = useToast();
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<CheckoutForm>({
     email: '',
@@ -122,9 +121,7 @@ export default function CheckoutClient() {
           <h1 className="font-serif text-3xl lg:text-4xl text-black mb-2">
             Ödeme
           </h1>
-          <p className="text-black/60">
-            Teslimat ve ödeme bilgilerinizi girin
-          </p>
+          <p className="text-black/60">Teslimat ve ödeme bilgilerinizi girin</p>
         </div>
 
         {/* Trust Badges */}
@@ -196,7 +193,7 @@ export default function CheckoutClient() {
                       className="px-4 py-3 border border-cream-300 rounded-lg focus:border-gold focus:ring-2 focus:ring-gold/20 focus:outline-none"
                     />
                   </div>
-                  
+
                   <textarea
                     required
                     value={formData.address}
@@ -205,7 +202,7 @@ export default function CheckoutClient() {
                     rows={3}
                     className="w-full px-4 py-3 border border-cream-300 rounded-lg focus:border-gold focus:ring-2 focus:ring-gold/20 focus:outline-none resize-none"
                   />
-                  
+
                   <div className="grid sm:grid-cols-3 gap-4">
                     <input
                       type="text"
@@ -246,20 +243,24 @@ export default function CheckoutClient() {
                       name="paymentMethod"
                       value="credit-card"
                       checked={formData.paymentMethod === 'credit-card'}
-                      onChange={(e) => updateField('paymentMethod', e.target.value as any)}
+                      onChange={(e) =>
+                        updateField('paymentMethod', e.target.value as any)
+                      }
                       className="w-4 h-4 text-gold focus:ring-gold"
                     />
                     <CreditCard className="w-5 h-5 text-gold" />
                     <span className="font-medium">Kredi/Banka Kartı</span>
                   </label>
-                  
+
                   <label className="flex items-center gap-3 p-4 border-2 border-cream-300 rounded-lg cursor-pointer hover:border-gold transition-colors">
                     <input
                       type="radio"
                       name="paymentMethod"
                       value="bank-transfer"
                       checked={formData.paymentMethod === 'bank-transfer'}
-                      onChange={(e) => updateField('paymentMethod', e.target.value as any)}
+                      onChange={(e) =>
+                        updateField('paymentMethod', e.target.value as any)
+                      }
                       className="w-4 h-4 text-gold focus:ring-gold"
                     />
                     <span className="font-medium">Havale/EFT</span>
@@ -287,7 +288,9 @@ export default function CheckoutClient() {
                 disabled={isLoading}
                 className="w-full py-4 bg-gold text-white font-medium rounded-lg hover:bg-gold/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {isLoading ? 'İşleminiz Gerçekleştiriliyor...' : 'Siparişi Tamamla'}
+                {isLoading
+                  ? 'İşleminiz Gerçekleştiriliyor...'
+                  : 'Siparişi Tamamla'}
               </button>
             </form>
           </div>
@@ -298,21 +301,28 @@ export default function CheckoutClient() {
               <h2 className="font-serif text-xl text-black mb-4">
                 Sipariş Özeti
               </h2>
-              
+
               {/* Items */}
               <div className="space-y-3 mb-6 max-h-60 overflow-y-auto">
                 {items.map((item) => (
                   <div key={item.id} className="flex gap-3 text-sm">
                     <div className="flex-shrink-0 w-16 h-16 bg-cream-50 rounded" />
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium line-clamp-1">{item.product.name}</p>
+                      <p className="font-medium line-clamp-1">
+                        {item.product.name}
+                      </p>
                       <p className="text-black/60">Adet: {item.quantity}</p>
                     </div>
-                    <p className="font-medium">{(item.product.price * item.quantity).toLocaleString('tr-TR')} TL</p>
+                    <p className="font-medium">
+                      {(item.product.price * item.quantity).toLocaleString(
+                        'tr-TR'
+                      )}
+                      ₺
+                    </p>
                   </div>
                 ))}
               </div>
-              
+
               {/* Summary */}
               <CartSummary />
             </div>

@@ -5,14 +5,13 @@
 
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import { CheckCircle, Package, Mail, ArrowRight } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { ArrowRight, CheckCircle, Mail, Package } from 'lucide-react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useEffect } from 'react';
 
-export default function OrderSuccessClient() {
-  const router = useRouter();
+function OrderSuccessContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get('order_id') || 'NOVELLA-' + Date.now();
 
@@ -34,11 +33,11 @@ export default function OrderSuccessClient() {
           <div className="inline-flex items-center justify-center w-24 h-24 bg-green-100 rounded-full mb-6">
             <CheckCircle className="w-12 h-12 text-green-600" />
           </div>
-          
+
           <h1 className="font-serif text-3xl lg:text-4xl text-black mb-2">
             Siparişiniz Alındı!
           </h1>
-          
+
           <p className="text-lg text-black/60">
             Teşekkür ederiz, siparişiniz başarıyla oluşturuldu.
           </p>
@@ -72,9 +71,7 @@ export default function OrderSuccessClient() {
                 <Package className="w-5 h-5 text-blue-600" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-black mb-1">
-                  Hazırlanıyor
-                </h3>
+                <h3 className="font-medium text-black mb-1">Hazırlanıyor</h3>
                 <p className="text-sm text-black/60">
                   Siparişiniz 1-3 iş günü içinde kargoya verilecektir.
                 </p>
@@ -85,12 +82,11 @@ export default function OrderSuccessClient() {
 
         {/* Info Box */}
         <div className="bg-blue-50 rounded-lg p-6 mb-8">
-          <h3 className="font-medium text-blue-900 mb-2">
-            📦 Kargo Takibi
-          </h3>
+          <h3 className="font-medium text-blue-900 mb-2">📦 Kargo Takibi</h3>
           <p className="text-sm text-blue-800">
-            Kargonuz yola çıktığında e-posta adresinize kargo takip numarası gönderilecektir.
-            Sipariş durumunuzu hesabınızdan takip edebilirsiniz.
+            Kargonuz yola çıktığında e-posta adresinize kargo takip numarası
+            gönderilecektir. Sipariş durumunuzu hesabınızdan takip
+            edebilirsiniz.
           </p>
         </div>
 
@@ -134,5 +130,22 @@ export default function OrderSuccessClient() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function OrderSuccessClient() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-cream flex items-center justify-center">
+          <div className="text-center">
+            <div className="inline-block w-8 h-8 border-4 border-gold border-t-transparent rounded-full animate-spin mb-4" />
+            <p className="text-black/60">Yükleniyor...</p>
+          </div>
+        </div>
+      }
+    >
+      <OrderSuccessContent />
+    </Suspense>
   );
 }

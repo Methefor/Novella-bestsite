@@ -5,11 +5,11 @@
 
 'use client';
 
+import type { CartItem as CartItemType } from '@/store/cartStore';
+import { useCartStore } from '@/store/cartStore';
+import { Minus, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Trash2, Plus, Minus } from 'lucide-react';
-import { useCartStore } from '@/store/cartStore';
-import type { CartItem as CartItemType } from '@/store/cartStore';
 
 interface CartItemProps {
   item: CartItemType;
@@ -17,11 +17,11 @@ interface CartItemProps {
 
 // Renk label'ları
 const colorLabels: Record<string, string> = {
-  'altin': 'Altın',
-  'gumus': 'Gümüş',
+  altin: 'Altın',
+  gumus: 'Gümüş',
   'rose-gold': 'Rose Gold',
-  'siyah': 'Siyah',
-  'beyaz': 'Beyaz',
+  siyah: 'Siyah',
+  beyaz: 'Beyaz',
   'cok-renkli': 'Çok Renkli',
 };
 
@@ -54,7 +54,7 @@ export default function CartItem({ item }: CartItemProps) {
             {item.product.name}
           </h3>
         </Link>
-        
+
         <div className="text-sm text-black/60 mt-1">
           <p>Renk: {colorLabel}</p>
           {item.customization && (
@@ -73,11 +73,11 @@ export default function CartItem({ item }: CartItemProps) {
             >
               <Minus className="w-3 h-3" />
             </button>
-            
+
             <span className="w-8 text-center font-medium text-sm">
               {item.quantity}
             </span>
-            
+
             <button
               onClick={() => updateQuantity(item.id, item.quantity + 1)}
               disabled={item.quantity >= item.variant.stock}
@@ -91,11 +91,11 @@ export default function CartItem({ item }: CartItemProps) {
           {/* Price */}
           <div className="text-right">
             <p className="font-bold text-black">
-              {itemTotal.toLocaleString('tr-TR')} TL
+              {itemTotal.toLocaleString('tr-TR')}₺
             </p>
             {item.quantity > 1 && (
               <p className="text-xs text-black/60">
-                {item.product.price.toLocaleString('tr-TR')} TL / adet
+                {item.product.price.toLocaleString('tr-TR')}₺ / adet
               </p>
             )}
           </div>

@@ -3,9 +3,9 @@
  * Sepet state management
  */
 
+import type { Product, ProductVariant } from '@/types/product';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import type { Product, ProductVariant } from '@/types/product';
 
 export interface CartItem {
   id: string; // Unique: productId + variantId
@@ -19,25 +19,30 @@ interface CartStore {
   // State
   items: CartItem[];
   isDrawerOpen: boolean;
-  
+
   // Computed values
   itemCount: number;
   subtotal: number;
   shippingCost: number;
   discount: number;
   total: number;
-  
+
   // Actions
-  addItem: (product: Product, variantId: string, quantity?: number, customization?: string) => void;
+  addItem: (
+    product: Product,
+    variantId: string,
+    quantity?: number,
+    customization?: string
+  ) => void;
   removeItem: (itemId: string) => void;
   updateQuantity: (itemId: string, quantity: number) => void;
   clearCart: () => void;
-  
+
   // Drawer
   openDrawer: () => void;
   closeDrawer: () => void;
   toggleDrawer: () => void;
-  
+
   // Coupon
   applyCoupon: (code: string) => boolean;
   removeCoupon: () => void;
@@ -45,8 +50,8 @@ interface CartStore {
 
 // Kargo ücreti hesaplama
 const calculateShipping = (subtotal: number): number => {
-  if (subtotal >= 300) return 0; // 300 TL üzeri ücretsiz
-  return 29.90;
+  if (subtotal >= 400) return 0; // 400₺ üzeri ücretsiz (eski: 300)
+  return 29.9;
 };
 
 export const useCartStore = create<CartStore>()(
@@ -67,7 +72,9 @@ export const useCartStore = create<CartStore>()(
           const variant = product.variants.find((v) => v.id === variantId);
           if (!variant) return;
 
-          const itemId = `${product.id}-${variantId}${customization ? `-${customization}` : ''}`;
+          const itemId = `${product.id}-${variantId}${
+            customization ? `-${customization}` : ''
+          }`;
           const items = get().items;
           const existingItem = items.find((item) => item.id === itemId);
 
@@ -75,7 +82,10 @@ export const useCartStore = create<CartStore>()(
 
           if (existingItem) {
             // Update quantity
-            const newQuantity = Math.min(existingItem.quantity + quantity, variant.stock);
+            const newQuantity = Math.min(
+              existingItem.quantity + quantity,
+              variant.stock
+            );
             newItems = items.map((item) =>
               item.id === itemId ? { ...item, quantity: newQuantity } : item
             );
@@ -98,7 +108,10 @@ export const useCartStore = create<CartStore>()(
           const shippingCost = calculateShipping(subtotal);
           const discount = get().discount;
           const total = subtotal + shippingCost - discount;
-          const itemCount = newItems.reduce((sum, item) => sum + item.quantity, 0);
+          const itemCount = newItems.reduce(
+            (sum, item) => sum + item.quantity,
+            0
+          );
 
           set(
             {
@@ -196,14 +209,18 @@ export const useCartStore = create<CartStore>()(
         openDrawer: () => set({ isDrawerOpen: true }, false, 'openDrawer'),
         closeDrawer: () => set({ isDrawerOpen: false }, false, 'closeDrawer'),
         toggleDrawer: () =>
-          set((state) => ({ isDrawerOpen: !state.isDrawerOpen }), false, 'toggleDrawer'),
+          set(
+            (state) => ({ isDrawerOpen: !state.isDrawerOpen }),
+            false,
+            'toggleDrawer'
+          ),
 
         // Coupon system
         applyCoupon: (code) => {
           const validCoupons: Record<string, number> = {
-            'ILKALISVERIS': 50, // 50 TL indirim
-            'NOVELLA10': 10, // 10% indirim (subtotal'dan)
-            'YENIYIL25': 25, // 25 TL indirim
+            ILKALISVERIS: 50, // 50 TL indirim
+            NOVELLA10: 10, // 10% indirim (subtotal'dan)
+            YENIYIL25: 25, // 25 TL indirim
           };
 
           const couponValue = validCoupons[code.toUpperCase()];

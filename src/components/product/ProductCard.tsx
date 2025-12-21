@@ -6,6 +6,7 @@
 'use client';
 
 import { useCartStore } from '@/store/cartStore';
+import { useWishlistStore } from '@/store/wishlistStore';
 import type { Product } from '@/types/product';
 import { Eye, Heart, ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
@@ -17,10 +18,15 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   const addToCart = useCartStore((state) => state.addItem);
+
+  const addToWishlist = useWishlistStore((state) => state.addItem);
+  const removeFromWishlist = useWishlistStore((state) => state.removeItem);
+  const isInWishlist = useWishlistStore((state) =>
+    state.isInWishlist(product.id)
+  );
 
   const defaultVariant =
     product.variants.find((v) => v.id === product.defaultVariant) ||
@@ -93,20 +99,24 @@ export default function ProductCard({ product }: ProductCardProps) {
           <button
             onClick={(e) => {
               e.preventDefault();
-              setIsWishlisted(!isWishlisted);
+              if (isInWishlist) {
+                removeFromWishlist(product.id);
+              } else {
+                addToWishlist(product);
+              }
             }}
             className={`
               p-2 rounded-full backdrop-blur-sm transition-all duration-200
               ${
-                isWishlisted
-                  ? 'bg-gold text-white'
-                  : 'bg-white/90 text-black/70 hover:bg-gold hover:text-white'
+                isInWishlist
+                  ? 'bg-red-500 text-white'
+                  : 'bg-white/90 text-black/70 hover:bg-red-500 hover:text-white'
               }
             `}
             aria-label="Favorilere ekle"
           >
             <Heart
-              className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`}
+              className={`w-5 h-5 ${isInWishlist ? 'fill-current' : ''}`}
             />
           </button>
 
@@ -185,11 +195,11 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         <div className="flex items-center gap-2">
           <span className="text-lg font-bold text-black">
-            {product.price.toLocaleString('tr-TR')} TL
+            {product.price.toLocaleString('tr-TR')}₺
           </span>
           {hasDiscount && (
             <span className="text-sm text-black/40 line-through">
-              {product.originalPrice!.toLocaleString('tr-TR')} TL
+              {product.originalPrice!.toLocaleString('tr-TR')}₺
             </span>
           )}
         </div>

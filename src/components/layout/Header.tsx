@@ -2,8 +2,9 @@
 
 import CartDrawer from '@/components/cart/CartDrawer';
 import MiniCart from '@/components/cart/MiniCart';
+import { useWishlistStore } from '@/store/wishlistStore';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, Search, User, X } from 'lucide-react';
+import { Heart, Menu, Search, X } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -11,8 +12,8 @@ const navigation = [
   { name: 'Ana Sayfa', href: '/' },
   { name: 'Koleksiyonlar', href: '/collections', hasDropdown: true },
   { name: 'Yeni Gelenler', href: '/collections/yeni' },
-  { name: 'Hakkımızda', href: '/hakkimizda' },
-  { name: 'İletişim', href: '/iletisim' },
+  { name: 'Hakkımızda', href: '/#hakkimizda' },
+  { name: 'İletişim', href: '/#iletisim' },
 ];
 
 const collections = [
@@ -27,6 +28,8 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const wishlistCount = useWishlistStore((state) => state.items.length);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -112,11 +115,16 @@ export default function Header() {
               </button>
 
               <Link
-                href="/hesap"
-                className="hidden md:block p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                aria-label="Hesabım"
+                href="/favoriler"
+                className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                aria-label="Favoriler"
               >
-                <User className="w-5 h-5 text-gray-700" />
+                <Heart className="w-5 h-5 text-gray-700" />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                    {wishlistCount > 9 ? '9+' : wishlistCount}
+                  </span>
+                )}
               </Link>
 
               <MiniCart />
@@ -184,12 +192,17 @@ export default function Header() {
                 ))}
 
                 <Link
-                  href="/hesap"
+                  href="/favoriler"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="block py-3 px-4 text-gray-700 hover:bg-gold/10 hover:text-gold rounded-lg transition-colors font-medium mt-4 border-t pt-4"
                 >
-                  <User className="w-5 h-5 inline mr-2" />
-                  Hesabım
+                  <Heart className="w-5 h-5 inline mr-2" />
+                  Favorilerim
+                  {wishlistCount > 0 && (
+                    <span className="ml-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                      {wishlistCount}
+                    </span>
+                  )}
                 </Link>
               </nav>
             </motion.div>
@@ -214,11 +227,11 @@ export default function Header() {
               className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-4"
             >
               <div className="p-6">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 mb-4">
                   <Search className="w-6 h-6 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="Ürün ara..."
+                    placeholder="Ürün, kategori veya marka ara..."
                     autoFocus
                     className="flex-1 text-lg outline-none"
                   />
@@ -228,6 +241,42 @@ export default function Header() {
                   >
                     <X className="w-5 h-5" />
                   </button>
+                </div>
+
+                <div className="border-t pt-4">
+                  <p className="text-xs text-gray-500 mb-3 uppercase tracking-wider">
+                    Popüler Aramalar
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <Link
+                      href="/collections/kolye"
+                      onClick={() => setIsSearchOpen(false)}
+                      className="px-3 py-1.5 bg-cream-100 text-sm rounded-full hover:bg-gold/10 hover:text-gold transition-colors"
+                    >
+                      Kolye
+                    </Link>
+                    <Link
+                      href="/collections/bilezik"
+                      onClick={() => setIsSearchOpen(false)}
+                      className="px-3 py-1.5 bg-cream-100 text-sm rounded-full hover:bg-gold/10 hover:text-gold transition-colors"
+                    >
+                      Bilezik
+                    </Link>
+                    <Link
+                      href="/collections/kupe"
+                      onClick={() => setIsSearchOpen(false)}
+                      className="px-3 py-1.5 bg-cream-100 text-sm rounded-full hover:bg-gold/10 hover:text-gold transition-colors"
+                    >
+                      Küpe
+                    </Link>
+                    <Link
+                      href="/collections/yuzuk"
+                      onClick={() => setIsSearchOpen(false)}
+                      className="px-3 py-1.5 bg-cream-100 text-sm rounded-full hover:bg-gold/10 hover:text-gold transition-colors"
+                    >
+                      Yüzük
+                    </Link>
+                  </div>
                 </div>
               </div>
             </motion.div>

@@ -14,11 +14,11 @@ import RelatedProducts from '@/components/product/RelatedProducts';
 import ShareButtons from '@/components/product/ShareButtons';
 import VariantSelector from '@/components/product/VariantSelector';
 import { useCartStore } from '@/store/cartStore';
+import { useWishlistStore } from '@/store/wishlistStore';
 import type { Product } from '@/types/product';
 import { Heart } from 'lucide-react';
 import { useState } from 'react';
 
-// Mock products (RelatedProducts için)
 const MOCK_PRODUCTS: Product[] = [
   {
     id: '1',
@@ -60,11 +60,16 @@ export default function ProductDetailClient({
   const [selectedVariantId, setSelectedVariantId] = useState(
     product.defaultVariant
   );
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [isCustomizationOpen, setIsCustomizationOpen] = useState(false);
   const [customText, setCustomText] = useState('');
 
   const addToCart = useCartStore((state) => state.addItem);
+
+  const addToWishlist = useWishlistStore((state) => state.addItem);
+  const removeFromWishlist = useWishlistStore((state) => state.removeItem);
+  const isInWishlist = useWishlistStore((state) =>
+    state.isInWishlist(product.id)
+  );
 
   const selectedVariant = product.variants.find(
     (v) => v.id === selectedVariantId
@@ -147,22 +152,28 @@ export default function ProductDetailClient({
             />
 
             <button
-              onClick={() => setIsWishlisted(!isWishlisted)}
+              onClick={() => {
+                if (isInWishlist) {
+                  removeFromWishlist(product.id);
+                } else {
+                  addToWishlist(product);
+                }
+              }}
               className={`
                 w-full py-3 px-4 rounded-lg font-medium
                 flex items-center justify-center gap-2
                 border-2 transition-all duration-200
                 ${
-                  isWishlisted
+                  isInWishlist
                     ? 'border-red-500 text-red-500 bg-red-50'
                     : 'border-cream-300 text-black/60 hover:border-gold hover:text-gold'
                 }
               `}
             >
               <Heart
-                className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`}
+                className={`w-5 h-5 ${isInWishlist ? 'fill-current' : ''}`}
               />
-              {isWishlisted ? 'Favorilerde' : 'Favorilere Ekle'}
+              {isInWishlist ? 'Favorilerde' : 'Favorilere Ekle'}
             </button>
 
             <div className="pt-6 border-t border-cream-200">

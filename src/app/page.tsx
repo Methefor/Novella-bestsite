@@ -1,26 +1,23 @@
-import HeroSection from '@/components/sections/HeroSection'
-import FeaturedProducts from '@/components/sections/FeaturedProducts'
-import CategoryGrid from '@/components/sections/CategoryGrid'
-import TrustBadges from '@/components/sections/TrustBadges'
-import GiftExperience from '@/components/sections/GiftExperience'
+// src/app/page.tsx
+
+import AboutSection from '@/components/sections/AboutSection';
+import CategoryGrid from '@/components/sections/CategoryGrid';
+import ContactSection from '@/components/sections/ContactSection';
+import FeaturedProducts from '@/components/sections/FeaturedProducts';
+import GiftExperience from '@/components/sections/GiftExperience';
+import HeroSection from '@/components/sections/HeroSection';
+import TrustBadges from '@/components/sections/TrustBadges';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
+    <div className="bg-black">
       <HeroSection />
-
-      {/* Featured Products - Yeni Gelenler */}
-      <FeaturedProducts />
-
-      {/* Category Grid */}
       <CategoryGrid />
-
-      {/* Trust Badges */}
+      <FeaturedProducts />
       <TrustBadges />
-
-      {/* Gift Experience Banner */}
       <GiftExperience />
+      <AboutSection />
+      <ContactSection />
     </div>
-  )
+  );
 }
