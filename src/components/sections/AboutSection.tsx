@@ -11,9 +11,9 @@ export default function AboutSection() {
             Her Parça Bir Hikaye
           </h2>
           <p className="text-lg text-white/70">
-            NOVELLA olarak, her takının bir hikayesi olduğuna inanıyoruz.
-            Tekirdağ'dan sizin için özenle seçilmiş koleksiyonlarımızla, her
-            anınıza değer katıyoruz.
+            NOVELLA olarak, her takının bir hikayesi olduğuna inanıyoruz. Sizin
+            için özenle seçilmiş koleksiyonlarımızla, her anınıza değer
+            katıyoruz.
           </p>
         </div>
 

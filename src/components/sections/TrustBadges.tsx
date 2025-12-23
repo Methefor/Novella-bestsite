@@ -1,13 +1,7 @@
-'use client'
+'use client';
 
-import { motion } from 'framer-motion'
-import { 
-  Gem, 
-  Package, 
-  Truck, 
-  MessageCircle, 
-  RefreshCw 
-} from 'lucide-react'
+import { motion } from 'framer-motion';
+import { Gem, MessageCircle, Package, RefreshCw, Truck } from 'lucide-react';
 
 const badges = [
   {
@@ -28,14 +22,14 @@ const badges = [
   {
     icon: MessageCircle,
     title: '7/24 İletişim',
-    description: 'WhatsApp ve Instagram\'dan anında destek',
+    description: 'WhatsApp ve Instagram anında destek',
   },
   {
     icon: RefreshCw,
     title: 'Kolay İade',
     description: '7 gün içinde ücretsiz iade ve değişim',
   },
-]
+];
 
 export default function TrustBadges() {
   return (
@@ -70,5 +64,5 @@ export default function TrustBadges() {
         </div>
       </div>
     </section>
-  )
+  );
 }

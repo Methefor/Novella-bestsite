@@ -43,7 +43,9 @@ export class ShopierClient {
   /**
    * Create Shopier order
    */
-  async createOrder(orderData: ShopierOrderData): Promise<{ success: boolean; orderId?: string; error?: string }> {
+  async createOrder(
+    orderData: ShopierOrderData
+  ): Promise<{ success: boolean; orderId?: string; error?: string }> {
     try {
       // DUMMY - Production'da gerçek API çağrısı yapılacak
       console.log('Shopier Order Created:', orderData);
@@ -105,7 +107,7 @@ export class ShopierClient {
    * Get payment URL (for redirect)
    */
   async getPaymentUrl(orderId: string): Promise<string> {
-    // DUMMY - Production'da Shopier'dan gelen URL
+    // DUMMY - Production'da Shopier gelen URL
     return `https://www.shopier.com/ShowProduct/checkout.php?order_id=${orderId}`;
 
     // REAL IMPLEMENTATION:

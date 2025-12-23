@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { Instagram, Send, Mail, Phone, MapPin } from 'lucide-react'
+import { Instagram, Mail, MapPin, Phone, Send } from 'lucide-react';
+import Link from 'next/link';
 
 const footerLinks = {
   catalog: {
@@ -36,7 +36,7 @@ const footerLinks = {
       { name: 'İletişim', href: '/iletisim' },
     ],
   },
-}
+};
 
 const socialLinks = [
   {
@@ -49,10 +49,10 @@ const socialLinks = [
     href: 'https://tiktok.com/@novella.tr',
     icon: Send, // TikTok icon olarak Send kullanıyoruz
   },
-]
+];
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="bg-black text-white">
@@ -69,8 +69,8 @@ export default function Footer() {
             </Link>
 
             <p className="text-sm text-gray-400 leading-relaxed">
-              Tekirdağ'dan sizin için özenle seçilmiş butik takı koleksiyonları. 
-              Kalite ve estetiği uygun fiyatlarla buluşturuyoruz.
+              Sizin için özenle seçilmiş butik takı koleksiyonları. Kalite ve
+              estetiği uygun fiyatlarla buluşturuyoruz.
             </p>
 
             {/* Social Media */}
@@ -155,9 +155,7 @@ export default function Footer() {
               <MapPin className="w-5 h-5 text-gold flex-shrink-0 mt-1" />
               <div>
                 <p className="text-sm font-medium">Adres</p>
-                <p className="text-sm text-gray-400 mt-1">
-                  Tekirdağ, Türkiye
-                </p>
+                <p className="text-sm text-gray-400 mt-1">, Türkiye</p>
               </div>
             </div>
 
@@ -206,10 +204,7 @@ export default function Footer() {
                 placeholder="E-posta adresiniz"
                 className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:border-gold transition-colors text-sm"
               />
-              <button
-                type="submit"
-                className="btn-primary whitespace-nowrap"
-              >
+              <button type="submit" className="btn-primary whitespace-nowrap">
                 Abone Ol
               </button>
             </form>
@@ -244,5 +239,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

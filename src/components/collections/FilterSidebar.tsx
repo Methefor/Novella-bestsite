@@ -25,9 +25,9 @@ const categoryLabels: Record<ProductCategory, string> = {
 // Malzeme labels
 const materialLabels: Record<ProductMaterial, string> = {
   celik: 'Çelik',
-  gumus: 'Gümüş',
+  'gumus-kaplama': 'Gümüş-kaplama',
   'altin-kaplama': 'Altın Kaplama',
-  'rose-gold': 'Rose Gold',
+  'rose-gold-kaplama': 'Rose Gold',
 };
 
 // Renk labels ve hex değerleri

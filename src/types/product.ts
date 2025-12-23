@@ -5,7 +5,11 @@
 
 export type ProductCategory = 'kolye' | 'bilezik' | 'kupe' | 'yuzuk';
 
-export type ProductMaterial = 'celik' | 'gumus' | 'altin-kaplama' | 'rose-gold';
+export type ProductMaterial =
+  | 'celik'
+  | 'gumus-kaplama' // ← Eklendi
+  | 'altin-kaplama'
+  | 'rose-gold-kaplama'; // ← Düzeltildi
 
 export type ProductColor =
   | 'altin'

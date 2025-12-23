@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: '%s | NOVELLA',
   },
   description:
-    "Butik takı koleksiyonları ile her parça bir hikaye. Kaliteli çelik takılar, uygun fiyatlar. Tekirdağ'dan sizin için özenle seçilmiş kolye, bilezik, küpe ve yüzük modelleri.",
+    'Butik takı koleksiyonları ile her parça bir hikaye. Kaliteli çelik takılar, uygun fiyatlar.  Sizin için özenle seçilmiş kolye, bilezik, küpe ve yüzük modelleri.',
   keywords: [
     'takı',
     'kolye',
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     'çelik takı',
     'butik takı',
     'NOVELLA',
-    'Tekirdağ',
+    '',
   ],
   authors: [{ name: 'NOVELLA' }],
   creator: 'NOVELLA',

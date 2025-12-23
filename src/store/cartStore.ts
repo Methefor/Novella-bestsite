@@ -219,7 +219,7 @@ export const useCartStore = create<CartStore>()(
         applyCoupon: (code) => {
           const validCoupons: Record<string, number> = {
             ILKALISVERIS: 50, // 50 TL indirim
-            NOVELLA10: 10, // 10% indirim (subtotal'dan)
+            NOVELLA10: 10, // 10% indirim (subtotal)
             YENIYIL25: 25, // 25 TL indirim
           };
 

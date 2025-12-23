@@ -1,20 +1,15 @@
-/**
- * NOVELLA - Collections Page
- * Ana ürün koleksiyonu sayfası
- */
-
+import { getAllProducts } from '@/data/products';
 import { Metadata } from 'next';
-import CollectionsClient from './CollectionsClient';
+import CollectionClient from './CollectionClient';
 
 export const metadata: Metadata = {
-  title: 'Tüm Ürünler | NOVELLA',
-  description: 'NOVELLA butik takı koleksiyonu. Kolye, bilezik, küpe ve yüzük kategorilerinde kaliteli çelik takılar.',
-  openGraph: {
-    title: 'Tüm Ürünler | NOVELLA',
-    description: 'Her parça bir hikaye. Butik takı koleksiyonumuzu keşfedin.',
-  },
+  title: 'Koleksiyonlar | NOVELLA',
+  description:
+    'Butik taki koleksiyonlarimizi kesfedin. Kolye, bilezik, kupe ve yuzuk modelleri.',
 };
 
 export default function CollectionsPage() {
-  return <CollectionsClient />;
+  const products = getAllProducts();
+
+  return <CollectionClient products={products} category="all" />;
 }

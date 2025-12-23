@@ -1,4 +1,5 @@
 # NOVELLA - Butik Takı E-Ticaret Web Sitesi
+
 **"Her Parça Bir Hikaye"**
 
 Modern, responsive ve performanslı e-ticaret web sitesi. Next.js 15, TypeScript ve Tailwind CSS ile geliştirilmiştir.
@@ -7,7 +8,7 @@ Modern, responsive ve performanslı e-ticaret web sitesi. Next.js 15, TypeScript
 
 ## 🎯 Proje Özeti
 
-NOVELLA, Tekirdağ'dan başlayarak Türkiye çapında butik takı satışı yapan bir e-ticaret platformudur. Kolye, bilezik, küpe ve yüzük kategorilerinde uygun fiyatlı, kaliteli çelik takılar sunulmaktadır.
+NOVELLA, başlayarak Türkiye çapında butik takı satışı yapan bir e-ticaret platformudur. Kolye, bilezik, küpe ve yüzük kategorilerinde uygun fiyatlı, kaliteli çelik takılar sunulmaktadır.
 
 ---
 
@@ -26,6 +27,7 @@ NOVELLA, Tekirdağ'dan başlayarak Türkiye çapında butik takı satışı yapa
 ## 📋 Geliştirme Fazları
 
 ### ✅ Faz 1: Altyapı & Temel Bileşenler (TAMAMLANDI)
+
 - ✅ Proje kurulumu
 - ✅ Design tokens (renk paleti, tipografi, spacing)
 - ✅ Tailwind konfigürasyonu
@@ -35,6 +37,7 @@ NOVELLA, Tekirdağ'dan başlayarak Türkiye çapında butik takı satışı yapa
 - ✅ Responsive tasarım temelleri
 
 ### ✅ Faz 2: Ana Sayfa Bölümleri (TAMAMLANDI)
+
 - ✅ Hero section (static banner)
 - ✅ Yeni Ürünler showcase
 - ✅ Kategori grid
@@ -44,6 +47,7 @@ NOVELLA, Tekirdağ'dan başlayarak Türkiye çapında butik takı satışı yapa
 - ✅ ProductGrid component
 
 ### ✅ Faz 3: Koleksiyon Sayfası & Filtreleme (TAMAMLANDI)
+
 - ✅ Zustand filter store
 - ✅ Product type definitions
 - ✅ FilterSidebar component
@@ -63,6 +67,7 @@ NOVELLA, Tekirdağ'dan başlayarak Türkiye çapında butik takı satışı yapa
 - ✅ Empty state & loading state
 
 ### 📅 Faz 4: Ürün Detay Sayfası (SIRADA)
+
 - [ ] Görsel galerisi (zoom, thumbnail nav)
 - [ ] Ürün bilgileri (description, features)
 - [ ] Varyasyon seçimi (renk, malzeme)
@@ -73,6 +78,7 @@ NOVELLA, Tekirdağ'dan başlayarak Türkiye çapında butik takı satışı yapa
 - [ ] Share buttons (social media)
 
 ### 📅 Faz 5: Sepet & Checkout
+
 - [ ] Sepet drawer/modal
 - [ ] Ürün miktarı yönetimi
 - [ ] Kargo hesaplama
@@ -80,6 +86,7 @@ NOVELLA, Tekirdağ'dan başlayarak Türkiye çapında butik takı satışı yapa
 - [ ] Kupon kodu sistemi
 
 ### 📅 Faz 6: Statik Sayfalar & Optimizasyon
+
 - [ ] FAQ accordion
 - [ ] Hakkımızda sayfası
 - [ ] İletişim formu
@@ -94,19 +101,22 @@ NOVELLA, Tekirdağ'dan başlayarak Türkiye çapında butik takı satışı yapa
 ## 🎨 Tasarım Sistemi
 
 ### Renk Paleti
-| Renk | Kod | Kullanım |
-|------|-----|----------|
-| **Gold** | `#D4AF37` | Ana marka rengi, CTA, accent |
-| **Rose Gold** | `#B76E79` | İkincil renk |
-| **Cream** | `#FDFBF7` | Arka plan |
-| **Black** | `#0F0F0F` | Text, borders |
-| **Soft Gold** | `#E5C158` | Hover states |
+
+| Renk          | Kod       | Kullanım                     |
+| ------------- | --------- | ---------------------------- |
+| **Gold**      | `#D4AF37` | Ana marka rengi, CTA, accent |
+| **Rose Gold** | `#B76E79` | İkincil renk                 |
+| **Cream**     | `#FDFBF7` | Arka plan                    |
+| **Black**     | `#0F0F0F` | Text, borders                |
+| **Soft Gold** | `#E5C158` | Hover states                 |
 
 ### Tipografi
+
 - **Heading:** Cormorant Garamond (Serif)
 - **Body:** Inter (Sans-serif)
 
 ### Spacing
+
 - Section padding: `3rem` (sm), `5rem` (md), `7rem` (lg)
 - Grid gap: `1rem` (sm), `1.5rem` (md), `2rem` (lg)
 
@@ -115,27 +125,32 @@ NOVELLA, Tekirdağ'dan başlayarak Türkiye çapında butik takı satışı yapa
 ## 📦 Kurulum
 
 ### Gereksinimler
+
 - Node.js 18+
 - npm veya yarn
 
 ### Adımlar
 
 1. **Bağımlılıkları yükle:**
+
 ```bash
 npm install
 ```
 
 2. **Geliştirme sunucusunu başlat:**
+
 ```bash
 npm run dev
 ```
 
 3. **Tarayıcıda aç:**
+
 ```
 http://localhost:3000
 ```
 
 ### Diğer Komutlar
+
 ```bash
 # Production build
 npm run build
@@ -199,6 +214,7 @@ novella-website/
 ### Mevcut Özellikler (Faz 1-3)
 
 #### Layout & Navigation
+
 - ✅ Responsive header (sticky, mobile menu)
 - ✅ Comprehensive footer (4 sütun)
 - ✅ Announcement bar (kampanya bildirimi)
@@ -207,6 +223,7 @@ novella-website/
 - ✅ Mobile navigation
 
 #### Ana Sayfa
+
 - ✅ Hero section (static banner + CTA)
 - ✅ Featured products grid
 - ✅ Category showcase (4 kategori)
@@ -214,13 +231,13 @@ novella-website/
 - ✅ Gift experience banner
 
 #### Koleksiyon Sayfası
+
 - ✅ **Filtreleme Sistemi:**
   - Kategori (kolye, bilezik, küpe, yüzük)
   - Fiyat aralığı (slider + input)
   - Malzeme (çelik, gümüş, altın kaplama, rose gold)
   - Renk (6 renk seçeneği, color swatches)
   - Özel özellikler (yeni, çok satan, isim baskısı, stokta var)
-  
 - ✅ **Sıralama:**
   - En yeni
   - En popüler
@@ -228,7 +245,6 @@ novella-website/
   - Fiyat: yüksekten düşüğe
   - İsim: A-Z
   - İsim: Z-A
-  
 - ✅ **Ürün Kartı:**
   - Hover efektleri (2. görsel gösterimi)
   - Badge sistemi (YENİ, İNDİRİM, ÇOK SATAN, STOKTA YOK)
@@ -237,18 +253,17 @@ novella-website/
   - Rating & review count
   - "Sepete Ekle" hover butonu
   - İsim baskısı badge
-  
 - ✅ **Responsive:**
   - Desktop filter sidebar
   - Mobile filter modal
   - Grid layout (1-4 columns)
-  
 - ✅ **State Management:**
   - Zustand store (persist filtreleri)
   - Performance optimization (selectors)
   - Reset filters fonksiyonu
 
 #### Product Card Component
+
 - ✅ Hover efektleri
 - ✅ Badge sistemi (NEW, SALE, BEST SELLER, OUT OF STOCK)
 - ✅ Quick actions (wishlist, quick view)
@@ -256,6 +271,7 @@ novella-website/
 - ✅ Rating display
 
 ### Gelecek Özellikler (Faz 4-6)
+
 - 🚧 Ürün detay sayfası
 - 🚧 Sepet yönetimi
 - 🚧 Shopier checkout entegrasyonu
@@ -271,6 +287,7 @@ novella-website/
 ## 🔧 Konfigürasyon
 
 ### Environment Variables
+
 Henüz kullanılmıyor, Faz 5'te eklenecek:
 
 ```env
@@ -282,24 +299,26 @@ NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=
 
 ## 📱 Responsive Breakpoints
 
-| Breakpoint | Ekran Boyutu |
-|------------|--------------|
-| **Mobile** | < 768px |
-| **Tablet** | 768px - 1024px |
+| Breakpoint  | Ekran Boyutu    |
+| ----------- | --------------- |
+| **Mobile**  | < 768px         |
+| **Tablet**  | 768px - 1024px  |
 | **Desktop** | 1024px - 1280px |
-| **Wide** | > 1280px |
+| **Wide**    | > 1280px        |
 
 ---
 
 ## 🎨 Component Kullanım Örnekleri
 
 ### Button
+
 ```tsx
 <button className="btn-primary">Sepete Ekle</button>
 <button className="btn-outline">Favorilere Ekle</button>
 ```
 
 ### Badge
+
 ```tsx
 <span className="badge-new">YENİ</span>
 <span className="badge-sale">%20 İNDİRİM</span>
@@ -308,18 +327,19 @@ NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=
 ```
 
 ### Filter Store Usage
+
 ```tsx
 import { useFilterStore } from '@/store/filterStore';
 
 function MyComponent() {
   const filterStore = useFilterStore();
-  
+
   // Toggle kategori
   filterStore.toggleCategory('kolye');
-  
+
   // Set fiyat aralığı
   filterStore.setPriceRange(100, 500);
-  
+
   // Reset tüm filtreler
   filterStore.resetFilters();
 }
@@ -330,6 +350,7 @@ function MyComponent() {
 ## 🚀 Deployment
 
 ### Vercel (Önerilen)
+
 ```bash
 # Vercel CLI ile deploy
 vercel
@@ -339,6 +360,7 @@ vercel --prod
 ```
 
 ### GitHub Integration
+
 Vercel'de GitHub repo'yu bağladığınızda otomatik deploy aktif olur.
 
 ---
@@ -355,6 +377,7 @@ Vercel'de GitHub repo'yu bağladığınızda otomatik deploy aktif olur.
 ## 🔄 Next Steps
 
 ### FAZ 4 - Ürün Detay Sayfası
+
 1. Product page layout
 2. Image gallery component
 3. Variant selector
@@ -363,6 +386,7 @@ Vercel'de GitHub repo'yu bağladığınızda otomatik deploy aktif olur.
 6. Related products section
 
 ### FAZ 5 - Sepet & Checkout
+
 1. Shopping cart store (Zustand)
 2. Cart drawer/modal
 3. Quantity management

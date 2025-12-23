@@ -189,7 +189,6 @@ export default function ProductDetailClient({
           <RelatedProducts
             currentProductId={product.id}
             category={product.category}
-            allProducts={MOCK_PRODUCTS}
           />
         </div>
       </div>

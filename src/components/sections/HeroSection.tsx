@@ -16,7 +16,7 @@ export default function HeroSection() {
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
-          src="/products/hero background.png"
+          src="/products/herobackground.png"
           alt="NOVELLA Background"
           fill
           priority
@@ -69,8 +69,8 @@ export default function HeroSection() {
             transition={{ delay: 0.6, duration: 0.8 }}
             className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed drop-shadow-lg"
           >
-            Tekirdağ'dan sizin için özenle seçilmiş butik takı koleksiyonları.
-            Kaliteli çelik takılar, premium tasarımlar, uygun fiyatlar.
+            Sizin için özenle seçilmiş butik takı koleksiyonları. Kaliteli çelik
+            takılar, premium tasarımlar, uygun fiyatlar.
           </motion.p>
 
           {/* CTA Buttons */}
