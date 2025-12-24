@@ -1,7 +1,13 @@
+/**
+ * NOVELLA - Header Component
+ * Gelişmiş arama modal'ı ile güncellenmiş header
+ */
+
 'use client';
 
 import CartDrawer from '@/components/cart/CartDrawer';
 import MiniCart from '@/components/cart/MiniCart';
+import SearchModal from '@/components/search/SearchModal';
 import { useWishlistStore } from '@/store/wishlistStore';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, Menu, Search, X } from 'lucide-react';
@@ -57,6 +63,7 @@ export default function Header() {
       >
         <div className="container-custom">
           <div className="flex items-center justify-between h-16 md:h-20">
+            {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden p-2 -ml-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -65,6 +72,7 @@ export default function Header() {
               <Menu className="w-6 h-6" />
             </button>
 
+            {/* Logo */}
             <Link href="/" className="flex items-center">
               <div className="text-center">
                 <h1 className="text-2xl md:text-3xl font-heading font-bold text-gradient-gold">
@@ -76,6 +84,7 @@ export default function Header() {
               </div>
             </Link>
 
+            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
               {navigation.map((item) => (
                 <div key={item.name} className="relative group">
@@ -86,6 +95,7 @@ export default function Header() {
                     {item.name}
                   </Link>
 
+                  {/* Dropdown Menu */}
                   {item.hasDropdown && (
                     <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                       <div className="bg-white shadow-xl rounded-lg py-4 min-w-[200px]">
@@ -105,7 +115,9 @@ export default function Header() {
               ))}
             </nav>
 
+            {/* Actions */}
             <div className="flex items-center space-x-2 md:space-x-4">
+              {/* Search Button */}
               <button
                 onClick={() => setIsSearchOpen(true)}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -114,6 +126,7 @@ export default function Header() {
                 <Search className="w-5 h-5 text-gray-700" />
               </button>
 
+              {/* Wishlist */}
               <Link
                 href="/favoriler"
                 className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -127,15 +140,18 @@ export default function Header() {
                 )}
               </Link>
 
+              {/* Mini Cart */}
               <MiniCart />
             </div>
           </div>
         </div>
       </header>
 
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
+            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -144,6 +160,7 @@ export default function Header() {
               className="fixed inset-0 bg-black/50 z-40 md:hidden"
             />
 
+            {/* Drawer */}
             <motion.div
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
@@ -210,80 +227,13 @@ export default function Header() {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {isSearchOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-20"
-            onClick={() => setIsSearchOpen(false)}
-          >
-            <motion.div
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -20, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-4"
-            >
-              <div className="p-6">
-                <div className="flex items-center gap-4 mb-4">
-                  <Search className="w-6 h-6 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Ürün, kategori veya marka ara..."
-                    autoFocus
-                    className="flex-1 text-lg outline-none"
-                  />
-                  <button
-                    onClick={() => setIsSearchOpen(false)}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
+      {/* Search Modal - YENİ GELİŞMİŞ MODAL */}
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
 
-                <div className="border-t pt-4">
-                  <p className="text-xs text-gray-500 mb-3 uppercase tracking-wider">
-                    Popüler Aramalar
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <Link
-                      href="/collections/kolye"
-                      onClick={() => setIsSearchOpen(false)}
-                      className="px-3 py-1.5 bg-cream-100 text-sm rounded-full hover:bg-gold/10 hover:text-gold transition-colors"
-                    >
-                      Kolye
-                    </Link>
-                    <Link
-                      href="/collections/bilezik"
-                      onClick={() => setIsSearchOpen(false)}
-                      className="px-3 py-1.5 bg-cream-100 text-sm rounded-full hover:bg-gold/10 hover:text-gold transition-colors"
-                    >
-                      Bilezik
-                    </Link>
-                    <Link
-                      href="/collections/kupe"
-                      onClick={() => setIsSearchOpen(false)}
-                      className="px-3 py-1.5 bg-cream-100 text-sm rounded-full hover:bg-gold/10 hover:text-gold transition-colors"
-                    >
-                      Küpe
-                    </Link>
-                    <Link
-                      href="/collections/yuzuk"
-                      onClick={() => setIsSearchOpen(false)}
-                      className="px-3 py-1.5 bg-cream-100 text-sm rounded-full hover:bg-gold/10 hover:text-gold transition-colors"
-                    >
-                      Yüzük
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
+      {/* Cart Drawer */}
       <CartDrawer />
     </>
   );
