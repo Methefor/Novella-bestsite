@@ -1,0 +1,8 @@
+User-Agent: *
+Allow: /
+Disallow: /checkout
+Disallow: /order-success
+Disallow: /hesap
+Disallow: /api
+
+Sitemap: https://novella.com.tr/sitemap.xml

@@ -1,72 +1,39 @@
-/**
- * NOVELLA - Advanced Filter Sidebar
- * Gelişmiş filtreleme sidebar'ı
- */
-
 'use client';
 
-import PriceRangeSlider from '@/components/filters/PriceRangeSlider';
-import type { ProductColor, ProductMaterial } from '@/types/product';
+import type { ProductFilters } from '@/hooks/useProductFilters';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
+import PriceRangeSlider from './PriceRangeSlider';
 
 interface AdvancedFilterSidebarProps {
-  priceRange: { min: number; max: number };
-  currentPriceRange: { min: number; max: number };
-  onPriceChange: (range: { min: number; max: number }) => void;
-  materials: ProductMaterial[];
-  onToggleMaterial: (material: ProductMaterial) => void;
-  colors: ProductColor[];
-  onToggleColor: (color: ProductColor) => void;
-  inStockOnly: boolean;
-  onToggleInStock: () => void;
-  isNew: boolean;
-  onToggleNew: () => void;
-  isBestSeller: boolean;
-  onToggleBestSeller: () => void;
+  filters: ProductFilters;
+  onFilterChange: (filters: Partial<ProductFilters>) => void;
+  onReset: () => void;
+  productCount: number;
 }
 
-const materialLabels: Record<ProductMaterial, string> = {
-  celik: 'Çelik',
-  'gumus-kaplama': 'Gümüş Kaplama',
-  'altin-kaplama': 'Altın Kaplama',
-  'rose-gold-kaplama': 'Rose Gold Kaplama',
-};
-
-const colorOptions: { value: ProductColor; label: string; hex: string }[] = [
-  { value: 'altin', label: 'Altın', hex: '#D4AF37' },
-  { value: 'gumus', label: 'Gümüş', hex: '#C0C0C0' },
-  { value: 'rose-gold', label: 'Rose Gold', hex: '#B76E79' },
-  { value: 'siyah', label: 'Siyah', hex: '#000000' },
-];
+const categories = ['Kolye', 'Bilezik', 'Küpe', 'Yüzük'];
+const materials = ['Çelik', 'Gümüş', 'Altın Kaplama', 'Rose Gold'];
+const colors = ['Altın', 'Gümüş', 'Rose Gold', 'Siyah'];
 
 export default function AdvancedFilterSidebar({
-  priceRange,
-  currentPriceRange,
-  onPriceChange,
-  materials,
-  onToggleMaterial,
-  colors,
-  onToggleColor,
-  inStockOnly,
-  onToggleInStock,
-  isNew,
-  onToggleNew,
-  isBestSeller,
-  onToggleBestSeller,
+  filters,
+  onFilterChange,
+  onReset,
+  productCount,
 }: AdvancedFilterSidebarProps) {
-  const [expandedSections, setExpandedSections] = useState({
-    price: true,
-    material: true,
-    color: true,
-    features: true,
-  });
+  const [openSections, setOpenSections] = useState<string[]>([
+    'category',
+    'material',
+    'price',
+  ]);
 
-  const toggleSection = (section: keyof typeof expandedSections) => {
-    setExpandedSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
+  const toggleSection = (section: string) => {
+    setOpenSections((prev) =>
+      prev.includes(section)
+        ? prev.filter((s) => s !== section)
+        : [...prev, section]
+    );
   };
 
   const FilterSection = ({
@@ -75,126 +42,155 @@ export default function AdvancedFilterSidebar({
     children,
   }: {
     title: string;
-    sectionKey: keyof typeof expandedSections;
+    sectionKey: string;
     children: React.ReactNode;
-  }) => (
-    <div className="border-b border-white/10 pb-6">
-      <button
-        onClick={() => toggleSection(sectionKey)}
-        className="flex items-center justify-between w-full mb-4"
-      >
-        <h3 className="font-medium text-white">{title}</h3>
-        {expandedSections[sectionKey] ? (
-          <ChevronUp className="w-5 h-5 text-white/60" />
-        ) : (
-          <ChevronDown className="w-5 h-5 text-white/60" />
-        )}
-      </button>
-      {expandedSections[sectionKey] && children}
-    </div>
-  );
+  }) => {
+    const isOpen = openSections.includes(sectionKey);
+
+    return (
+      <div className="border-b border-gray-200 last:border-0">
+        <button
+          onClick={() => toggleSection(sectionKey)}
+          className="w-full flex items-center justify-between py-4 text-left"
+        >
+          <span className="font-semibold text-gray-900">{title}</span>
+          {isOpen ? (
+            <ChevronUp className="w-5 h-5 text-gray-400" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-gray-400" />
+          )}
+        </button>
+        {isOpen && <div className="pb-4">{children}</div>}
+      </div>
+    );
+  };
+
+  const onCategoryToggle = (category: string) => {
+    const currentCategories = filters.categories || [];
+    const newCategories = currentCategories.includes(category)
+      ? currentCategories.filter((c) => c !== category)
+      : [...currentCategories, category];
+    onFilterChange({ categories: newCategories });
+  };
+
+  const onMaterialToggle = (material: string) => {
+    const currentMaterials = filters.materials || [];
+    const newMaterials = currentMaterials.includes(material)
+      ? currentMaterials.filter((m) => m !== material)
+      : [...currentMaterials, material];
+    onFilterChange({ materials: newMaterials });
+  };
+
+  const onColorToggle = (color: string) => {
+    const currentColors = filters.colors || [];
+    const newColors = currentColors.includes(color)
+      ? currentColors.filter((c) => c !== color)
+      : [...currentColors, color];
+    onFilterChange({ colors: newColors });
+  };
+
+  const onPriceChange = (range: [number, number]) => {
+    onFilterChange({ priceRange: range });
+  };
+
+  const priceRange = { min: 0, max: 10000 };
+  const currentPriceRange = filters.priceRange || [
+    priceRange.min,
+    priceRange.max,
+  ];
 
   return (
-    <div className="space-y-6 w-64">
-      <h2 className="font-serif text-xl text-white">Filtrele</h2>
+    <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="font-serif text-2xl text-gray-900">Filtreler</h2>
+        <button
+          onClick={onReset}
+          className="text-sm text-gold hover:text-gold-dark font-medium transition-colors"
+        >
+          Temizle
+        </button>
+      </div>
 
-      {/* Price Range */}
-      <FilterSection title="Fiyat Aralığı" sectionKey="price">
-        <PriceRangeSlider
-          min={priceRange?.min || 0}
-          max={priceRange?.max || 10000}
-          value={currentPriceRange}
-          onChange={onPriceChange}
-        />
-      </FilterSection>
+      <div className="space-y-0">
+        <FilterSection title="Kategori" sectionKey="category">
+          <div className="space-y-2">
+            {categories.map((category) => (
+              <label
+                key={category}
+                className="flex items-center gap-3 cursor-pointer group"
+              >
+                <input
+                  type="checkbox"
+                  checked={filters.categories?.includes(category) || false}
+                  onChange={() => onCategoryToggle(category)}
+                  className="checkbox"
+                />
+                <span className="text-sm text-gray-700 group-hover:text-gray-900">
+                  {category}
+                </span>
+              </label>
+            ))}
+          </div>
+        </FilterSection>
 
-      {/* Materials */}
-      <FilterSection title="Malzeme" sectionKey="material">
-        <div className="space-y-2">
-          {(Object.keys(materialLabels) as ProductMaterial[]).map(
-            (material) => (
+        <FilterSection title="Malzeme" sectionKey="material">
+          <div className="space-y-2">
+            {materials.map((material) => (
               <label
                 key={material}
                 className="flex items-center gap-3 cursor-pointer group"
               >
                 <input
                   type="checkbox"
-                  checked={materials.includes(material)}
-                  onChange={() => onToggleMaterial(material)}
-                  className="w-4 h-4 rounded border-white/20 bg-white/5 text-gold focus:ring-2 focus:ring-gold focus:ring-offset-0 focus:ring-offset-gray-900 cursor-pointer"
+                  checked={filters.materials?.includes(material) || false}
+                  onChange={() => onMaterialToggle(material)}
+                  className="checkbox"
                 />
-                <span className="text-sm text-white/80 group-hover:text-white transition-colors">
-                  {materialLabels[material]}
+                <span className="text-sm text-gray-700 group-hover:text-gray-900">
+                  {material}
                 </span>
               </label>
-            )
-          )}
-        </div>
-      </FilterSection>
+            ))}
+          </div>
+        </FilterSection>
 
-      {/* Colors */}
-      <FilterSection title="Renk" sectionKey="color">
-        <div className="grid grid-cols-2 gap-3">
-          {colorOptions.map((color) => (
-            <button
-              key={color.value}
-              onClick={() => onToggleColor(color.value)}
-              className={`flex items-center gap-2 p-2 rounded-lg border transition-all ${
-                colors.includes(color.value)
-                  ? 'bg-gold/20 border-gold'
-                  : 'bg-white/5 border-white/10 hover:border-white/30'
-              }`}
-            >
-              <div
-                className="w-6 h-6 rounded-full border-2 border-white/20"
-                style={{ backgroundColor: color.hex }}
-              />
-              <span className="text-xs text-white/80">{color.label}</span>
-            </button>
-          ))}
-        </div>
-      </FilterSection>
+        <FilterSection title="Fiyat Aralığı" sectionKey="price">
+          <PriceRangeSlider
+            min={priceRange.min}
+            max={priceRange.max}
+            value={{ min: currentPriceRange[0], max: currentPriceRange[1] }}
+            onChange={(range) => onPriceChange([range.min, range.max])}
+          />
+        </FilterSection>
 
-      {/* Features */}
-      <FilterSection title="Özellikler" sectionKey="features">
-        <div className="space-y-3">
-          <label className="flex items-center gap-3 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={inStockOnly}
-              onChange={onToggleInStock}
-              className="w-4 h-4 rounded border-white/20 bg-white/5 text-gold focus:ring-2 focus:ring-gold focus:ring-offset-0 focus:ring-offset-gray-900 cursor-pointer"
-            />
-            <span className="text-sm text-white/80 group-hover:text-white transition-colors">
-              Sadece Stokta Olanlar
-            </span>
-          </label>
+        <FilterSection title="Renk" sectionKey="color">
+          <div className="space-y-2">
+            {colors.map((color) => (
+              <label
+                key={color}
+                className="flex items-center gap-3 cursor-pointer group"
+              >
+                <input
+                  type="checkbox"
+                  checked={filters.colors?.includes(color) || false}
+                  onChange={() => onColorToggle(color)}
+                  className="checkbox"
+                />
+                <span className="text-sm text-gray-700 group-hover:text-gray-900">
+                  {color}
+                </span>
+              </label>
+            ))}
+          </div>
+        </FilterSection>
+      </div>
 
-          <label className="flex items-center gap-3 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={isNew}
-              onChange={onToggleNew}
-              className="w-4 h-4 rounded border-white/20 bg-white/5 text-gold focus:ring-2 focus:ring-gold focus:ring-offset-0 focus:ring-offset-gray-900 cursor-pointer"
-            />
-            <span className="text-sm text-white/80 group-hover:text-white transition-colors">
-              Yeni Ürünler
-            </span>
-          </label>
-
-          <label className="flex items-center gap-3 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={isBestSeller}
-              onChange={onToggleBestSeller}
-              className="w-4 h-4 rounded border-white/20 bg-white/5 text-gold focus:ring-2 focus:ring-gold focus:ring-offset-0 focus:ring-offset-gray-900 cursor-pointer"
-            />
-            <span className="text-sm text-white/80 group-hover:text-white transition-colors">
-              Çok Satanlar
-            </span>
-          </label>
-        </div>
-      </FilterSection>
+      <div className="mt-6 pt-6 border-t border-gray-200">
+        <p className="text-sm text-gray-600">
+          <span className="font-semibold text-gray-900">{productCount}</span>{' '}
+          ürün bulundu
+        </p>
+      </div>
     </div>
   );
 }

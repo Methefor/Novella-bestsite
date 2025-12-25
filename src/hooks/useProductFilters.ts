@@ -1,160 +1,100 @@
-/**
- * NOVELLA - Filter Hook
- * Gelişmiş filtreleme mantığı
- */
+import type { Product } from '@/types/product';
+import { useMemo, useState } from 'react';
 
-'use client';
-
-import type { Product, ProductColor, ProductMaterial } from '@/types/product';
-import { useEffect, useMemo, useState } from 'react';
-
-export interface FilterOptions {
-  priceRange: {
-    min: number;
-    max: number;
-  };
-  materials: ProductMaterial[];
-  colors: ProductColor[];
-  inStockOnly: boolean;
-  isNew: boolean;
-  isBestSeller: boolean;
+export interface ProductFilters {
+  categories?: string[];
+  materials?: string[];
+  colors?: string[];
+  priceRange?: [number, number];
+  features?: string[];
+  sortBy?: 'price-asc' | 'price-desc' | 'name' | 'newest';
 }
 
-const DEFAULT_FILTERS: FilterOptions = {
-  priceRange: { min: 0, max: 1000 },
-  materials: [],
-  colors: [],
-  inStockOnly: false,
-  isNew: false,
-  isBestSeller: false,
-};
-
 export function useProductFilters(products: Product[]) {
-  const [filters, setFilters] = useState<FilterOptions>(DEFAULT_FILTERS);
+  const [filters, setFilters] = useState<ProductFilters>({});
 
-  // Calculate price range from products
-  const priceRange = useMemo(() => {
-    if (products.length === 0) return { min: 0, max: 1000 };
-
-    const prices = products.map((p) => p.price);
-    return {
-      min: Math.floor(Math.min(...prices) / 100) * 100,
-      max: Math.ceil(Math.max(...prices) / 100) * 100,
-    };
-  }, [products]);
-
-  // Set initial price range
-  useEffect(() => {
-    setFilters((prev) => ({
-      ...prev,
-      priceRange: priceRange,
-    }));
-  }, [priceRange]);
-
-  // Filter products
-  const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
-      // Price filter
-      if (
-        product.price < filters.priceRange.min ||
-        product.price > filters.priceRange.max
-      ) {
-        return false;
-      }
-
-      // Material filter
-      if (
-        filters.materials.length > 0 &&
-        !filters.materials.includes(product.material)
-      ) {
-        return false;
-      }
-
-      // Color filter
-      if (filters.colors.length > 0) {
-        const productColors = product.variants.map((v) => v.color);
-        if (!productColors.some((c) => filters.colors.includes(c))) {
-          return false;
-        }
-      }
-
-      // Stock filter
-      if (filters.inStockOnly) {
-        const hasStock = product.variants.some((v) => v.stock > 0);
-        if (!hasStock) return false;
-      }
-
-      // New products filter
-      if (filters.isNew && !product.isNew) {
-        return false;
-      }
-
-      // Best seller filter
-      if (filters.isBestSeller && !product.isBestSeller) {
-        return false;
-      }
-
-      return true;
-    });
-  }, [products, filters]);
-
-  // Update filters
-  const updateFilter = <K extends keyof FilterOptions>(
+  // Update single filter
+  const updateFilter = <K extends keyof ProductFilters>(
     key: K,
-    value: FilterOptions[K]
+    value: ProductFilters[K]
   ) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
-  // Toggle material
-  const toggleMaterial = (material: ProductMaterial) => {
-    setFilters((prev) => ({
-      ...prev,
-      materials: prev.materials.includes(material)
-        ? prev.materials.filter((m) => m !== material)
-        : [...prev.materials, material],
-    }));
+  // Update multiple filters at once
+  const updateFilters = (newFilters: Partial<ProductFilters>) => {
+    setFilters((prev) => ({ ...prev, ...newFilters }));
   };
 
-  // Toggle color
-  const toggleColor = (color: ProductColor) => {
-    setFilters((prev) => ({
-      ...prev,
-      colors: prev.colors.includes(color)
-        ? prev.colors.filter((c) => c !== color)
-        : [...prev.colors, color],
-    }));
-  };
-
-  // Reset filters
+  // Reset all filters
   const resetFilters = () => {
-    setFilters({
-      ...DEFAULT_FILTERS,
-      priceRange: priceRange,
-    });
+    setFilters({});
   };
 
-  // Check if any filter is active
-  const hasActiveFilters = useMemo(() => {
-    return (
-      filters.materials.length > 0 ||
-      filters.colors.length > 0 ||
-      filters.inStockOnly ||
-      filters.isNew ||
-      filters.isBestSeller ||
-      filters.priceRange.min !== priceRange.min ||
-      filters.priceRange.max !== priceRange.max
-    );
-  }, [filters, priceRange]);
+  // Filter products
+  const filteredProducts = useMemo(() => {
+    let result = [...products];
+
+    // Category filter
+    if (filters.categories && filters.categories.length > 0) {
+      result = result.filter((p) => filters.categories!.includes(p.category));
+    }
+
+    // Material filter
+    if (filters.materials && filters.materials.length > 0) {
+      result = result.filter((p) =>
+        filters.materials!.some((m) => p.material.includes(m))
+      );
+    }
+
+    // Color filter
+    if (filters.colors && filters.colors.length > 0) {
+      result = result.filter((p) =>
+        p.variants.some((v) => filters.colors!.includes(v.color))
+      );
+    }
+
+    // Price range filter
+    if (filters.priceRange) {
+      result = result.filter(
+        (p) =>
+          p.price >= filters.priceRange![0] && p.price <= filters.priceRange![1]
+      );
+    }
+
+    // Features filter
+    if (filters.features && filters.features.length > 0) {
+      result = result.filter((p) =>
+        filters.features!.every((f) => p.features?.includes(f))
+      );
+    }
+
+    // Sort
+    if (filters.sortBy) {
+      switch (filters.sortBy) {
+        case 'price-asc':
+          result.sort((a, b) => a.price - b.price);
+          break;
+        case 'price-desc':
+          result.sort((a, b) => b.price - a.price);
+          break;
+        case 'name':
+          result.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case 'newest':
+          result = result.filter((p) => p.isNew);
+          break;
+      }
+    }
+
+    return result;
+  }, [products, filters]);
 
   return {
     filters,
     filteredProducts,
     updateFilter,
-    toggleMaterial,
-    toggleColor,
+    updateFilters,
     resetFilters,
-    hasActiveFilters,
-    priceRange,
   };
 }
