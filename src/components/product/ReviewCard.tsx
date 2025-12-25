@@ -1,12 +1,12 @@
 /**
- * NOVELLA - Review Card
- * Tek bir yorumu gösteren kart
+ * NOVELLA - Review Card Component
+ * Tek bir yorumu göster
  */
 
 'use client';
 
 import type { Review } from '@/types/review';
-import { BadgeCheck, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { CheckCircle, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { useState } from 'react';
 import RatingStars from './RatingStars';
 
@@ -14,73 +14,73 @@ interface ReviewCardProps {
   review: Review;
 }
 
+function formatDate(date: string): string {
+  return new Intl.DateTimeFormat('tr-TR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(new Date(date));
+}
+
 export default function ReviewCard({ review }: ReviewCardProps) {
-  const [helpfulCount, setHelpfulCount] = useState(review.helpful);
-  const [notHelpfulCount, setNotHelpfulCount] = useState(review.notHelpful);
-  const [userVote, setUserVote] = useState<'helpful' | 'not-helpful' | null>(
+  const [hasVoted, setHasVoted] = useState<'helpful' | 'notHelpful' | null>(
     null
   );
+  const [helpfulCount, setHelpfulCount] = useState(review.helpful);
+  const [notHelpfulCount, setNotHelpfulCount] = useState(review.notHelpful);
 
-  const handleVote = (vote: 'helpful' | 'not-helpful') => {
-    if (userVote === vote) {
+  const handleVote = (type: 'helpful' | 'notHelpful') => {
+    if (hasVoted === type) {
       // Remove vote
-      if (vote === 'helpful') {
-        setHelpfulCount(helpfulCount - 1);
+      setHasVoted(null);
+      if (type === 'helpful') {
+        setHelpfulCount((prev) => prev - 1);
       } else {
-        setNotHelpfulCount(notHelpfulCount - 1);
+        setNotHelpfulCount((prev) => prev - 1);
       }
-      setUserVote(null);
     } else {
-      // Change or add vote
-      if (userVote === 'helpful') {
-        setHelpfulCount(helpfulCount - 1);
-        setNotHelpfulCount(notHelpfulCount + 1);
-      } else if (userVote === 'not-helpful') {
-        setHelpfulCount(helpfulCount + 1);
-        setNotHelpfulCount(notHelpfulCount - 1);
-      } else {
-        if (vote === 'helpful') {
-          setHelpfulCount(helpfulCount + 1);
-        } else {
-          setNotHelpfulCount(notHelpfulCount + 1);
-        }
+      // Add vote or change vote
+      if (hasVoted === 'helpful') {
+        setHelpfulCount((prev) => prev - 1);
+      } else if (hasVoted === 'notHelpful') {
+        setNotHelpfulCount((prev) => prev - 1);
       }
-      setUserVote(vote);
+
+      setHasVoted(type);
+      if (type === 'helpful') {
+        setHelpfulCount((prev) => prev + 1);
+      } else {
+        setNotHelpfulCount((prev) => prev + 1);
+      }
     }
   };
 
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('tr-TR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }).format(date);
-  };
-
   return (
-    <div className="p-6 bg-gray-800 border border-white/10 rounded-lg">
+    <div className="bg-gray-800 border border-white/10 rounded-xl p-6">
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
-          <div className="flex items-center gap-2 mb-2">
-            <h4 className="font-medium text-white">{review.author.name}</h4>
+          <div className="flex items-center gap-3 mb-2">
+            <h4 className="font-semibold text-white">{review.author.name}</h4>
             {review.author.isVerified && (
-              <div className="flex items-center gap-1 px-2 py-0.5 bg-green-500/20 text-green-400 text-xs rounded-full">
-                <BadgeCheck className="w-3 h-3" />
-                <span>Doğrulanmış Alıcı</span>
-              </div>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs rounded-full">
+                <CheckCircle className="w-3 h-3" />
+                Doğrulanmış Alıcı
+              </span>
             )}
           </div>
-          <RatingStars rating={review.rating} size="sm" />
+          <div className="flex items-center gap-3">
+            <RatingStars rating={review.rating} size="sm" />
+            <time className="text-sm text-white/40">
+              {formatDate(review.createdAt)}
+            </time>
+          </div>
         </div>
-        <time className="text-sm text-white/40">
-          {formatDate(review.createdAt)}
-        </time>
       </div>
 
       {/* Title */}
       {review.title && (
-        <h5 className="font-medium text-white mb-2">{review.title}</h5>
+        <h5 className="font-semibold text-white mb-2">{review.title}</h5>
       )}
 
       {/* Comment */}
@@ -92,7 +92,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
           {review.images.map((image, index) => (
             <div
               key={index}
-              className="w-20 h-20 bg-gray-700 rounded-lg overflow-hidden"
+              className="w-20 h-20 rounded-lg overflow-hidden border border-white/10"
             >
               <img
                 src={image}
@@ -104,33 +104,40 @@ export default function ReviewCard({ review }: ReviewCardProps) {
         </div>
       )}
 
-      {/* Footer */}
+      {/* Helpful Buttons */}
       <div className="flex items-center gap-4 pt-4 border-t border-white/10">
-        <span className="text-sm text-white/60">
-          Bu yorum yardımcı oldu mu?
-        </span>
+        <p className="text-sm text-white/60">
+          Bu değerlendirme yardımcı oldu mu?
+        </p>
         <div className="flex items-center gap-2">
           <button
             onClick={() => handleVote('helpful')}
-            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm transition-colors ${
-              userVote === 'helpful'
-                ? 'bg-green-500/20 text-green-400'
-                : 'bg-white/5 text-white/60 hover:bg-white/10'
-            }`}
+            className={`
+              inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all
+              ${
+                hasVoted === 'helpful'
+                  ? 'bg-emerald-500/20 border border-emerald-500/50 text-emerald-400'
+                  : 'bg-gray-700 border border-white/10 text-white/70 hover:border-emerald-500/30'
+              }
+            `}
           >
             <ThumbsUp className="w-4 h-4" />
-            <span>{helpfulCount}</span>
+            <span className="text-sm font-medium">{helpfulCount}</span>
           </button>
+
           <button
-            onClick={() => handleVote('not-helpful')}
-            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm transition-colors ${
-              userVote === 'not-helpful'
-                ? 'bg-red-500/20 text-red-400'
-                : 'bg-white/5 text-white/60 hover:bg-white/10'
-            }`}
+            onClick={() => handleVote('notHelpful')}
+            className={`
+              inline-flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all
+              ${
+                hasVoted === 'notHelpful'
+                  ? 'bg-red-500/20 border border-red-500/50 text-red-400'
+                  : 'bg-gray-700 border border-white/10 text-white/70 hover:border-red-500/30'
+              }
+            `}
           >
             <ThumbsDown className="w-4 h-4" />
-            <span>{notHelpfulCount}</span>
+            <span className="text-sm font-medium">{notHelpfulCount}</span>
           </button>
         </div>
       </div>

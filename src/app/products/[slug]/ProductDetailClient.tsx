@@ -1,6 +1,6 @@
 /**
  * NOVELLA - Product Detail Client Component
- * Dark theme optimized + Icon badges + REVIEW SYSTEM
+ * Luxury Cream Theme + Review System
  */
 
 'use client';
@@ -70,7 +70,7 @@ export default function ProductDetailClient({
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 py-12">
+    <div className="min-h-screen bg-cream py-12">
       <div className="container-custom">
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Image Gallery */}

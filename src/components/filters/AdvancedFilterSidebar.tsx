@@ -101,8 +101,8 @@ export default function AdvancedFilterSidebar({
       {/* Price Range */}
       <FilterSection title="Fiyat Aralığı" sectionKey="price">
         <PriceRangeSlider
-          min={priceRange.min}
-          max={priceRange.max}
+          min={priceRange?.min || 0}
+          max={priceRange?.max || 10000}
           value={currentPriceRange}
           onChange={onPriceChange}
         />

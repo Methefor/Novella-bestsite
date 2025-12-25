@@ -1,5 +1,5 @@
 /**
- * NOVELLA - Review Type Definitions
+ * NOVELLA - Review Types
  * Yorum ve değerlendirme tipleri
  */
 
@@ -9,16 +9,16 @@ export interface Review {
   author: {
     name: string;
     email: string;
-    isVerified: boolean; // Doğrulanmış alıcı mı?
+    isVerified: boolean;
   };
-  rating: number; // 1-5
+  rating: number;
   title: string;
   comment: string;
-  images?: string[]; // Kullanıcı fotoğrafları
-  helpful: number; // Kaç kişi yararlı buldu
-  notHelpful: number; // Kaç kişi yararlı bulmadı
-  createdAt: Date;
-  updatedAt: Date;
+  images?: string[];
+  helpful: number;
+  notHelpful: number;
+  createdAt: string; // ← Date değil string
+  updatedAt: string; // ← Date değil string
 }
 
 export interface ReviewStats {
